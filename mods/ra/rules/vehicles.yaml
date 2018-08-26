@@ -370,6 +370,8 @@ MCV:
 		EffectiveOwnerFromOwner: true
 	TransferTimedExternalConditionOnTransform:
 		Condition: invulnerability
+	GivesBuildableArea:
+		AreaTypes: building
 
 JEEP:
 	Inherits: ^Vehicle

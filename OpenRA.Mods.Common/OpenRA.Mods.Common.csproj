@@ -97,6 +97,7 @@
     <Compile Include="Activities\FindResources.cs" />
     <Compile Include="Activities\HarvestResource.cs" />
     <Compile Include="Activities\HarvesterDockSequence.cs" />
+    <Compile Include="Activities\BuildOnSite.cs" />
     <Compile Include="Activities\Hunt.cs" />
     <Compile Include="Activities\Move\AttackMoveActivity.cs" />
     <Compile Include="Activities\Move\Drag.cs" />
@@ -148,6 +149,7 @@
     <Compile Include="Effects\SpriteEffect.cs" />
     <Compile Include="Graphics\RailgunRenderable.cs" />
     <Compile Include="Effects\LaunchEffect.cs" />
+    <Compile Include="Orders\BuilderUnitBuildingOrderGenerator.cs" />
     <Compile Include="Projectiles\AreaBeam.cs" />
     <Compile Include="Projectiles\Bullet.cs" />
     <Compile Include="Projectiles\InstantHit.cs" />
@@ -309,6 +311,8 @@
     <Compile Include="Traits\Buildings\RepairableBuilding.cs" />
     <Compile Include="Traits\Buildings\RequiresBuildableArea.cs" />
     <Compile Include="Traits\Buildings\Reservable.cs" />
+    <Compile Include="Traits\Player\BuilderUnit.cs" />
+    <Compile Include="Traits\Player\BuildUnitPlaceBuilding.cs" />
     <Compile Include="Traits\RepairsUnits.cs" />
     <Compile Include="Traits\Burns.cs" />
     <Compile Include="Traits\ChangesTerrain.cs" />
@@ -595,7 +599,9 @@
     <Compile Include="UtilityCommands\ExtractTraitDocsCommand.cs" />
     <Compile Include="UtilityCommands\ExtractWeaponDocsCommand.cs" />
     <Compile Include="Warheads\ChangeOwnerWarhead.cs" />
+    <Compile Include="Widgets\Logic\Ingame\BuildingPickerLogic.cs" />
     <Compile Include="Widgets\Logic\MusicHotkeyLogic.cs" />
+    <Compile Include="Widgets\BuildSelectPaletteWidget.cs" />
     <Compile Include="WorldExtensions.cs" />
     <Compile Include="UtilityCommands\GetMapHashCommand.cs" />
     <Compile Include="UtilityCommands\Glob.cs" />

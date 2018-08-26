@@ -80,6 +80,38 @@ E1:
 		RequiresCondition: parachute
 	ProducibleWithLevel:
 		Prerequisites: barracks.upgraded
+	BaseProvider:
+		Range: 8c0
+	ProvidesPrerequisite@allies:
+		Factions: allies, england, france, germany
+		Prerequisite: structures.allies
+	ProvidesPrerequisite@alliesvanilla:
+		Factions: allies
+		Prerequisite: structures.alliesvanilla
+	ProvidesPrerequisite@england:
+		Factions: england
+		Prerequisite: structures.england
+	ProvidesPrerequisite@france:
+		Factions: france
+		Prerequisite: structures.france
+	ProvidesPrerequisite@germany:
+		Factions: germany
+		Prerequisite: structures.germany
+	ProvidesPrerequisite@soviet:
+		Factions: soviet, russia, ukraine
+		Prerequisite: structures.soviet
+	ProvidesPrerequisite@sovietvanilla:
+		Factions: soviet
+		Prerequisite: structures.sovietvanilla
+	ProvidesPrerequisite@russia:
+		Factions: russia
+		Prerequisite: structures.russia
+	ProvidesPrerequisite@ukraine:
+		Factions: ukraine
+		Prerequisite: structures.ukraine
+	BuilderUnit@Building:
+		Type: Building
+		Group: Building
 
 E1R1:
 	Inherits: E1

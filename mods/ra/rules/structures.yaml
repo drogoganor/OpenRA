@@ -1520,6 +1520,9 @@ POWR:
 	WithDeathAnimation:
 		DeathSequence: dead
 		UseDeathTypeSuffix: false
+	RequiresBuildableArea:
+		AreaTypes: building
+		Adjacent: 14
 
 APWR:
 	Inherits: ^Building

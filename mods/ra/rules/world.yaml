@@ -181,7 +181,9 @@ World:
 	ScreenShaker:
 	BuildingInfluence:
 	ProductionQueueFromSelection:
+		ProductionParent: SIDEBAR_PRODUCTION
 		ProductionPaletteWidget: PRODUCTION_PALETTE
+		BuildSelectPalette: BUILD_SELECT_PALETTE
 	LegacyBridgeLayer:
 		Bridges: bridge1, bridge2, bridge3, bridge4, br1, br2, br3, sbridge1, sbridge2, sbridge3, sbridge4
 	CustomTerrainDebugOverlay:
