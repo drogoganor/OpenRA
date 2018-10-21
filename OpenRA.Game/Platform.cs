@@ -190,6 +190,9 @@ namespace OpenRA
 		/// </summary>
 		public static string UnresolvePath(string path)
 		{
+			var engineDir = "engine" + (CurrentPlatform == PlatformType.Windows ? "\\" : "/");  // SDK hack
+			var sdkGameDir = GameDir.Substring(0, GameDir.Length - engineDir.Length);
+
 			// Use a case insensitive comparison on windows to avoid problems
 			// with inconsistent drive letter case
 			var compare = CurrentPlatform == PlatformType.Windows ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
@@ -198,6 +201,8 @@ namespace OpenRA
 
 			if (path.StartsWith(GameDir, compare))
 				path = "./" + path.Substring(GameDir.Length);
+			else if (GameDir.EndsWith(engineDir) && path.StartsWith(sdkGameDir))  // SDK hack
+				path = "./" + path.Substring(sdkGameDir.Length);
 
 			if (CurrentPlatform == PlatformType.Windows)
 				path = path.Replace('\\', '/');
