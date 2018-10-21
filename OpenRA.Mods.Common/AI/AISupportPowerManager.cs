@@ -12,6 +12,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using OpenRA.AI;
 using OpenRA.Mods.Common.Activities;
 using OpenRA.Mods.Common.Pathfinder;
 using OpenRA.Mods.Common.Traits;
@@ -73,7 +74,7 @@ namespace OpenRA.Mods.Common.AI
 					if (attackLocation == null)
 					{
 						HackyAI.BotDebug("AI: {1} can't find suitable coarse attack location for support power {0}. Delaying rescan.", sp.Info.OrderName, player.PlayerName);
-						waitingPowers[sp] += powerDecision.GetNextScanTime(ai);
+						waitingPowers[sp] += GetRescanDelay(powerDecision);
 
 						continue;
 					}
@@ -83,7 +84,7 @@ namespace OpenRA.Mods.Common.AI
 					if (attackLocation == null)
 					{
 						HackyAI.BotDebug("AI: {1} can't find suitable final attack location for support power {0}. Delaying rescan.", sp.Info.OrderName, player.PlayerName);
-						waitingPowers[sp] += powerDecision.GetNextScanTime(ai);
+						waitingPowers[sp] += GetRescanDelay(powerDecision);
 
 						continue;
 					}
@@ -94,6 +95,12 @@ namespace OpenRA.Mods.Common.AI
 					ai.QueueOrder(new Order(sp.Key, supportPowerManager.Self, Target.FromCell(world, attackLocation.Value), false) { SuppressVisualFeedback = true });
 				}
 			}
+		}
+
+		/// <summary>Get a random scan time between the decision's specified intervals.</summary>
+		int GetRescanDelay(SupportPowerDecision powerDecision)
+		{
+			return ai.Random.Next(powerDecision.MinimumScanTimeInterval, powerDecision.MaximumScanTimeInterval);
 		}
 
 		/// <summary>Scans the map in chunks, evaluating all actors in each.</summary>

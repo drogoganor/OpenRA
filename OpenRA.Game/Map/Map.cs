@@ -206,6 +206,7 @@ namespace OpenRA
 		public readonly MiniYaml VoiceDefinitions;
 		public readonly MiniYaml MusicDefinitions;
 		public readonly MiniYaml NotificationDefinitions;
+		public readonly MiniYaml AIDefinitions;
 		public readonly MiniYaml TranslationDefinitions;
 
 		// Generated data
@@ -400,7 +401,8 @@ namespace OpenRA
 			try
 			{
 				Rules = Ruleset.Load(modData, this, Tileset, RuleDefinitions, WeaponDefinitions,
-					VoiceDefinitions, NotificationDefinitions, MusicDefinitions, SequenceDefinitions, ModelSequenceDefinitions);
+					VoiceDefinitions, NotificationDefinitions, AIDefinitions, MusicDefinitions,
+					SequenceDefinitions, ModelSequenceDefinitions);
 			}
 			catch (Exception e)
 			{

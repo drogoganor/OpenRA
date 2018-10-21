@@ -200,7 +200,8 @@ namespace OpenRA.Mods.Common.Widgets.Logic
 
 				slotsButton.OnMouseDown = _ =>
 				{
-					var botTypes = map.Rules.Actors["player"].TraitInfos<IBotInfo>().Select(t => t.Type);
+					var botTypes = map.Rules.AIs.Select(t => t.Value.Type);
+
 					var options = new Dictionary<string, IEnumerable<DropDownOption>>();
 
 					var botController = orderManager.LobbyInfo.Clients.FirstOrDefault(c => c.IsAdmin);
@@ -525,7 +526,7 @@ namespace OpenRA.Mods.Common.Widgets.Logic
 						if (addBotOnMapLoad)
 						{
 							var slot = orderManager.LobbyInfo.FirstEmptyBotSlot();
-							var bot = currentMap.Rules.Actors["player"].TraitInfos<IBotInfo>().Select(t => t.Type).FirstOrDefault();
+							var bot = currentMap.Rules.AIs.Select(t => t.Value.Type).FirstOrDefault();
 							var botController = orderManager.LobbyInfo.Clients.FirstOrDefault(c => c.IsAdmin);
 							if (slot != null && bot != null)
 								orderManager.IssueOrder(Order.Command("slot_bot {0} {1} {2}".F(slot, botController.Index, bot)));

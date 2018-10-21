@@ -103,8 +103,10 @@
     <Compile Include="Activities\Activity.cs" />
     <Compile Include="Activities\CallFunc.cs" />
     <Compile Include="Actor.cs" />
+    <Compile Include="AI\SupportPowerDecision.cs" />
     <Compile Include="CacheStorage.cs" />
     <Compile Include="FileSystem\IPackage.cs" />
+    <Compile Include="GameRules\AIInfo.cs" />
     <Compile Include="Primitives\Int32Matrix4x4.cs" />
     <Compile Include="LogProxy.cs" />
     <Compile Include="Map\MapGrid.cs" />

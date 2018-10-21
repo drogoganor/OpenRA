@@ -20,35 +20,42 @@ using OpenRA.Traits;
 
 namespace OpenRA
 {
+	public class RulesetInfo
+	{
+		public IReadOnlyDictionary<string, ActorInfo> Actors;
+		public IReadOnlyDictionary<string, WeaponInfo> Weapons;
+		public IReadOnlyDictionary<string, SoundInfo> Voices;
+		public IReadOnlyDictionary<string, SoundInfo> Notifications;
+		public IReadOnlyDictionary<string, AIInfo> AIs;
+		public IReadOnlyDictionary<string, MusicInfo> Music;
+		public TileSet TileSet;
+		public SequenceProvider Sequences;
+		public IReadOnlyDictionary<string, MiniYamlNode> ModelSequences;
+	}
+
 	public class Ruleset
 	{
 		public readonly IReadOnlyDictionary<string, ActorInfo> Actors;
 		public readonly IReadOnlyDictionary<string, WeaponInfo> Weapons;
 		public readonly IReadOnlyDictionary<string, SoundInfo> Voices;
 		public readonly IReadOnlyDictionary<string, SoundInfo> Notifications;
+		public readonly IReadOnlyDictionary<string, AIInfo> AIs;
 		public readonly IReadOnlyDictionary<string, MusicInfo> Music;
 		public readonly TileSet TileSet;
 		public readonly SequenceProvider Sequences;
 		public readonly IReadOnlyDictionary<string, MiniYamlNode> ModelSequences;
 
-		public Ruleset(
-			IReadOnlyDictionary<string, ActorInfo> actors,
-			IReadOnlyDictionary<string, WeaponInfo> weapons,
-			IReadOnlyDictionary<string, SoundInfo> voices,
-			IReadOnlyDictionary<string, SoundInfo> notifications,
-			IReadOnlyDictionary<string, MusicInfo> music,
-			TileSet tileSet,
-			SequenceProvider sequences,
-			IReadOnlyDictionary<string, MiniYamlNode> modelSequences)
+		public Ruleset(RulesetInfo info)
 		{
-			Actors = actors;
-			Weapons = weapons;
-			Voices = voices;
-			Notifications = notifications;
-			Music = music;
-			TileSet = tileSet;
-			Sequences = sequences;
-			ModelSequences = modelSequences;
+			Actors = info.Actors;
+			Weapons = info.Weapons;
+			Voices = info.Voices;
+			Notifications = info.Notifications;
+			AIs = info.AIs;
+			Music = info.Music;
+			TileSet = info.TileSet;
+			Sequences = info.Sequences;
+			ModelSequences = info.ModelSequences;
 
 			foreach (var a in Actors.Values)
 			{
@@ -132,6 +139,9 @@ namespace OpenRA
 					k => new ActorInfo(modData.ObjectCreator, k.Key.ToLowerInvariant(), k.Value),
 					filterNode: n => n.Key.StartsWith(ActorInfo.AbstractActorPrefix, StringComparison.Ordinal));
 
+				var ais = MergeOrDefault("Manifest,AIs", fs, m.AIs, null, null,
+					k => new AIInfo(k.Key.ToLowerInvariant(), k.Value));
+
 				var weapons = MergeOrDefault("Manifest,Weapons", fs, m.Weapons, null, null,
 					k => new WeaponInfo(k.Key.ToLowerInvariant(), k.Value));
 
@@ -148,7 +158,18 @@ namespace OpenRA
 					k => k);
 
 				// The default ruleset does not include a preferred tileset or sequence set
-				ruleset = new Ruleset(actors, weapons, voices, notifications, music, null, null, modelSequences);
+				ruleset = new Ruleset(new RulesetInfo()
+				{
+					Actors = actors,
+					Weapons = weapons,
+					Voices = voices,
+					Notifications = notifications,
+					AIs = ais,
+					Music = music,
+					TileSet = null,
+					Sequences = null,
+					ModelSequences = modelSequences
+				});
 			};
 
 			if (modData.IsOnMainThread)
@@ -174,12 +195,23 @@ namespace OpenRA
 			var ts = modData.DefaultTileSets[tileSet];
 			var sequences = modData.DefaultSequences[tileSet];
 
-			return new Ruleset(dr.Actors, dr.Weapons, dr.Voices, dr.Notifications, dr.Music, ts, sequences, dr.ModelSequences);
+			return new Ruleset(new RulesetInfo()
+			{
+				Actors = dr.Actors,
+				Weapons = dr.Weapons,
+				Voices = dr.Voices,
+				Notifications = dr.Notifications,
+				AIs = dr.AIs,
+				Music = dr.Music,
+				TileSet = ts,
+				Sequences = sequences,
+				ModelSequences = dr.ModelSequences
+			});
 		}
 
 		public static Ruleset Load(ModData modData, IReadOnlyFileSystem fileSystem, string tileSet,
 			MiniYaml mapRules, MiniYaml mapWeapons, MiniYaml mapVoices, MiniYaml mapNotifications,
-			MiniYaml mapMusic, MiniYaml mapSequences, MiniYaml mapModelSequences)
+			MiniYaml mapAIs, MiniYaml mapMusic, MiniYaml mapSequences, MiniYaml mapModelSequences)
 		{
 			var m = modData.Manifest;
 			var dr = modData.DefaultRules;
@@ -190,6 +222,9 @@ namespace OpenRA
 				var actors = MergeOrDefault("Rules", fileSystem, m.Rules, mapRules, dr.Actors,
 					k => new ActorInfo(modData.ObjectCreator, k.Key.ToLowerInvariant(), k.Value),
 					filterNode: n => n.Key.StartsWith(ActorInfo.AbstractActorPrefix, StringComparison.Ordinal));
+
+				var ais = MergeOrDefault("AIs", fileSystem, m.AIs, mapAIs, dr.AIs,
+					k => new AIInfo(k.Key.ToLowerInvariant(), k.Value));
 
 				var weapons = MergeOrDefault("Weapons", fileSystem, m.Weapons, mapWeapons, dr.Weapons,
 					k => new WeaponInfo(k.Key.ToLowerInvariant(), k.Value));
@@ -215,7 +250,18 @@ namespace OpenRA
 					modelSequences = MergeOrDefault("ModelSequences", fileSystem, m.ModelSequences, mapModelSequences, dr.ModelSequences,
 						k => k);
 
-				ruleset = new Ruleset(actors, weapons, voices, notifications, music, ts, sequences, modelSequences);
+				ruleset = new Ruleset(new RulesetInfo()
+				{
+					Actors = actors,
+					Weapons = weapons,
+					Voices = voices,
+					Notifications = notifications,
+					AIs = ais,
+					Music = music,
+					TileSet = ts,
+					Sequences = sequences,
+					ModelSequences = modelSequences
+				});
 			};
 
 			if (modData.IsOnMainThread)

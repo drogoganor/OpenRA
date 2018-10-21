@@ -56,6 +56,16 @@ namespace OpenRA.Traits
 		void Kill(Actor self, Actor attacker, BitSet<DamageType> damageTypes);
 	}
 
+	public interface IValuedInfo : ITraitInfo
+	{
+		int Cost { get; }
+	}
+
+	public interface IValued
+	{
+		int Cost { get; }
+	}
+
 	// depends on the order of pips in WorldRenderer.cs!
 	public enum PipType { Transparent, Green, Yellow, Red, Gray, Blue, Ammo, AmmoEmpty }
 

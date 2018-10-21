@@ -315,8 +315,7 @@ namespace OpenRA.Mods.Common.Server
 			}
 
 			var botType = parts[2];
-			var botInfo = server.Map.Rules.Actors["player"].TraitInfos<IBotInfo>()
-				.FirstOrDefault(b => b.Type == botType);
+			var botInfo = server.Map.Rules.AIs.FirstOrDefault(b => b.Value.Type == botType).Value;
 
 			if (botInfo == null)
 			{
@@ -401,7 +400,7 @@ namespace OpenRA.Mods.Common.Server
 				//  - Players who now lack a slot are made observers
 				//  - Bots who now lack a slot are dropped
 				//  - Bots who are not defined in the map rules are dropped
-				var botTypes = server.Map.Rules.Actors["player"].TraitInfos<IBotInfo>().Select(t => t.Type);
+				var botTypes = server.Map.Rules.AIs.Select(t => t.Value.Type);
 				var slots = server.LobbyInfo.Slots.Keys.ToArray();
 				var i = 0;
 				foreach (var os in oldSlots)

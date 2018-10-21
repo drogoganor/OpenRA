@@ -40,7 +40,6 @@ MapFolders:
 
 Rules:
 	ra|rules/misc.yaml
-	ra|rules/ai.yaml
 	ra|rules/player.yaml
 	ra|rules/palettes.yaml
 	ra|rules/world.yaml
@@ -136,6 +135,9 @@ Voices:
 
 Notifications:
 	ra|audio/notifications.yaml
+
+AIs:
+	ra|ai/ai.yaml
 
 Music:
 	ra|audio/music.yaml

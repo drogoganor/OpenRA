@@ -350,7 +350,7 @@ namespace OpenRA
 		public static string SanitizedPlayerName(string dirty)
 		{
 			var forbiddenNames = new string[] { "Open", "Closed" };
-			var botNames = OpenRA.Game.ModData.DefaultRules.Actors["player"].TraitInfos<IBotInfo>().Select(t => t.Name);
+			var botNames = OpenRA.Game.ModData.DefaultRules.AIs.Select(t => t.Value.Name);
 
 			var clean = SanitizedName(dirty);
 
