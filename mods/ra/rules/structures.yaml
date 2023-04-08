@@ -1186,6 +1186,7 @@ FACT:
 		Range: 4c0
 	Production:
 		Produces: Building, Defense
+	DefaultProductionPaletteProvider:
 	Valued:
 		Cost: 2000
 	Tooltip:

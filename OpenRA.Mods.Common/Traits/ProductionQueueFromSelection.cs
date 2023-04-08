@@ -48,28 +48,41 @@ namespace OpenRA.Mods.Common.Traits
 
 			// Queue-per-actor
 			var queue = world.Selection.Actors
-				.Where(a => a.IsInWorld && a.World.LocalPlayer == a.Owner)
 				.SelectMany(a => a.TraitsImplementing<ProductionQueue>())
 				.FirstOrDefault(q => q.Enabled);
 
-			// Queue-per-player
-			if (queue == null)
-			{
-				var types = world.Selection.Actors.Where(a => a.IsInWorld && a.World.LocalPlayer == a.Owner)
-					.SelectMany(a => a.TraitsImplementing<Production>().Where(p => !p.IsTraitDisabled))
-					.SelectMany(t => t.Info.Produces);
+			var paletteProvider = world.Selection.Actors
+				.Where(a => a.IsInWorld && a.World.LocalPlayer == a.Owner)
+				.SelectMany(a => a.TraitsImplementing<DefaultProductionPaletteProvider>())
+				.FirstOrDefault(); // q => q.Enabled
 
-				queue = world.LocalPlayer.PlayerActor.TraitsImplementing<ProductionQueue>()
-					.FirstOrDefault(q => q.Enabled && types.Contains(q.Info.Type));
+			if (paletteProvider != null && queue != null)
+			{
+				paletteProvider.CurrentQueue = queue;
+
+				paletteWidget.Value.ProductionPaletteProvider = paletteProvider;
+				return;
 			}
 
-			if (queue == null || !queue.BuildableItems().Any())
+			// Queue-per-player
+			var types = world.Selection.Actors.Where(a => a.IsInWorld && a.World.LocalPlayer == a.Owner)
+				.SelectMany(a => a.TraitsImplementing<Production>().Where(p => !p.IsTraitDisabled))
+				.SelectMany(t => t.Info.Produces);
+
+			queue = world.LocalPlayer.PlayerActor.TraitsImplementing<ProductionQueue>()
+				.FirstOrDefault(q => q.Enabled && types.Contains(q.Info.Type));
+
+			paletteProvider = world.LocalPlayer.PlayerActor.TraitsImplementing<DefaultProductionPaletteProvider>()
+				.FirstOrDefault();
+
+			if (queue == null || paletteProvider == null || !queue.BuildableItems().Any())
 				return;
+
+			paletteProvider.CurrentQueue = queue;
+			paletteWidget.Value.ProductionPaletteProvider = paletteProvider;
 
 			if (tabsWidget.Value != null)
 				tabsWidget.Value.CurrentQueue = queue;
-			else if (paletteWidget.Value != null)
-				paletteWidget.Value.CurrentQueue = queue;
 		}
 	}
 }

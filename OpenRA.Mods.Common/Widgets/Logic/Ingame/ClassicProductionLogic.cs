@@ -33,7 +33,8 @@ namespace OpenRA.Mods.Common.Widgets.Logic
 
 			void SelectTab(bool reverse)
 			{
-				palette.CurrentQueue = queues.FirstOrDefault(q => q.Enabled);
+				if (palette.ProductionPaletteProvider != null)
+					palette.ProductionPaletteProvider.CurrentQueue = queues.FirstOrDefault(q => q.Enabled);
 
 				// When a tab is selected, scroll to the top because the current row position may be invalid for the new tab
 				palette.ScrollToTop();
@@ -46,7 +47,7 @@ namespace OpenRA.Mods.Common.Widgets.Logic
 			button.OnMouseUp = mi => SelectTab(mi.Modifiers.HasModifier(Modifiers.Shift));
 			button.OnKeyPress = e => SelectTab(e.Modifiers.HasModifier(Modifiers.Shift));
 			button.OnClick = () => SelectTab(false);
-			button.IsHighlighted = () => queues.Contains(palette.CurrentQueue);
+			button.IsHighlighted = () => queues.Contains(palette.ProductionPaletteProvider?.CurrentQueue);
 
 			var chromeName = button.ProductionGroup.ToLowerInvariant();
 			var icon = button.Get<ImageWidget>("ICON");
@@ -128,7 +129,7 @@ namespace OpenRA.Mods.Common.Widgets.Logic
 			var ticker = widget.Get<LogicTickerWidget>("PRODUCTION_TICKER");
 			ticker.OnTick = () =>
 			{
-				if (palette.CurrentQueue == null || palette.DisplayedIconCount == 0)
+				if (palette.ProductionPaletteProvider == null || palette.ProductionPaletteProvider.CurrentQueue == null || palette.DisplayedIconCount == 0)
 				{
 					// Select the first active tab
 					foreach (var b in typesContainer.Children)

@@ -12,6 +12,7 @@ EditorPlayer:
 Player:
 	Inherits: ^BasePlayer
 	TechTree:
+	DefaultProductionPaletteProvider:
 	ClassicProductionQueue@Building:
 		Type: Building
 		DisplayOrder: 0

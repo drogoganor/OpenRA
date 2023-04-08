@@ -20,7 +20,7 @@ namespace OpenRA.Mods.Common.Widgets.Logic
 	public class ProductionTooltipLogic : ChromeLogic
 	{
 		[ObjectCreator.UseCtor]
-		public ProductionTooltipLogic(Widget widget, TooltipContainerWidget tooltipContainer, Player player, Func<ProductionIcon> getTooltipIcon)
+		public ProductionTooltipLogic(Widget widget, TooltipContainerWidget tooltipContainer, Player player, Func<IProductionPaletteIcon> getTooltipIcon)
 		{
 			var world = player.World;
 			var mapRules = world.Map.Rules;
@@ -70,8 +70,10 @@ namespace OpenRA.Mods.Common.Widgets.Logic
 				var buildable = actor.TraitInfo<BuildableInfo>();
 
 				var cost = 0;
-				if (tooltipIcon.ProductionQueue != null)
-					cost = tooltipIcon.ProductionQueue.GetProductionCost(actor);
+				if (tooltipIcon is DefaultProductionIcon defaultProductionIcon)
+				{
+					cost = defaultProductionIcon.ProductionQueue.GetProductionCost(actor);
+				}
 				else
 				{
 					var valued = actor.TraitInfoOrDefault<ValuedInfo>();
@@ -123,12 +125,16 @@ namespace OpenRA.Mods.Common.Widgets.Logic
 					powerSize = font.Measure(powerLabel.Text);
 				}
 
-				var buildTime = tooltipIcon.ProductionQueue?.GetBuildTime(actor, buildable) ?? 0;
-				var timeModifier = pm != null && pm.PowerState != PowerState.Normal ? tooltipIcon.ProductionQueue.Info.LowPowerModifier : 100;
+				var timeSize = int2.Zero;
+				if (tooltipIcon is DefaultProductionIcon defaultProductionIcon2)
+				{
+					var buildTime = defaultProductionIcon2.ProductionQueue?.GetBuildTime(actor, buildable) ?? 0;
+					var timeModifier = pm != null && pm.PowerState != PowerState.Normal ? defaultProductionIcon2.ProductionQueue.Info.LowPowerModifier : 100;
 
-				timeLabel.Text = formatBuildTime.Update(buildTime * timeModifier / 100);
-				timeLabel.TextColor = (pm != null && pm.PowerState != PowerState.Normal && tooltipIcon.ProductionQueue.Info.LowPowerModifier > 100) ? Color.Red : Color.White;
-				var timeSize = font.Measure(timeLabel.Text);
+					timeLabel.Text = formatBuildTime.Update(buildTime * timeModifier / 100);
+					timeLabel.TextColor = (pm != null && pm.PowerState != PowerState.Normal && defaultProductionIcon2.ProductionQueue.Info.LowPowerModifier > 100) ? Color.Red : Color.White;
+					timeSize = font.Measure(timeLabel.Text);
+				}
 
 				costLabel.Text = cost.ToString();
 				costLabel.GetColor = () => pr.Cash + pr.Resources >= cost ? Color.White : Color.Red;

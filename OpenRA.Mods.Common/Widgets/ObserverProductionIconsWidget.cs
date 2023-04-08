@@ -36,12 +36,12 @@ namespace OpenRA.Mods.Common.Widgets
 		public string ClockSequence = "idle";
 		public string ClockPalette = "chrome";
 
-		public ProductionIcon TooltipIcon { get; private set; }
-		public Func<ProductionIcon> GetTooltipIcon;
+		public IProductionPaletteIcon TooltipIcon { get; private set; }
+		public Func<IProductionPaletteIcon> GetTooltipIcon;
 
 		readonly Dictionary<ProductionQueue, Animation> clocks;
 		readonly Lazy<TooltipContainerWidget> tooltipContainer;
-		readonly List<ProductionIcon> productionIcons = new List<ProductionIcon>();
+		readonly List<DefaultProductionIcon> productionIcons = new List<DefaultProductionIcon>();
 		readonly List<Rectangle> productionIconsBounds = new List<Rectangle>();
 
 		readonly float2 iconSize;
@@ -147,7 +147,7 @@ namespace OpenRA.Mods.Common.Widgets
 				WidgetUtils.DrawSpriteCentered(icon.Image, worldRenderer.Palette(palette), centerPosition, 0.5f);
 
 				var rect = new Rectangle((int)iconTopLeft.X, (int)iconTopLeft.Y, (int)iconSize.X, (int)iconSize.Y);
-				productionIcons.Add(new ProductionIcon
+				productionIcons.Add(new DefaultProductionIcon
 				{
 					Actor = actor,
 					Pos = new float2(rect.Location),

@@ -169,11 +169,11 @@ namespace OpenRA.Mods.Common.Widgets
 
 		public ProductionQueue CurrentQueue
 		{
-			get => paletteWidget.Value.CurrentQueue;
+			get => paletteWidget.Value.ProductionPaletteProvider.CurrentQueue;
 
 			set
 			{
-				paletteWidget.Value.CurrentQueue = value;
+				paletteWidget.Value.ProductionPaletteProvider.CurrentQueue = value;
 				queueGroup = value?.Info.Group;
 
 				// TODO: Scroll tabs so selected queue is visible

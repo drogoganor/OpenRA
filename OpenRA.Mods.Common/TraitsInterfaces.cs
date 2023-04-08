@@ -16,6 +16,7 @@ using OpenRA.Graphics;
 using OpenRA.Mods.Common.Activities;
 using OpenRA.Mods.Common.Graphics;
 using OpenRA.Mods.Common.Terrain;
+using OpenRA.Mods.Common.Widgets;
 using OpenRA.Primitives;
 using OpenRA.Traits;
 
@@ -545,6 +546,16 @@ namespace OpenRA.Mods.Common.Traits
 	public interface IEditorActorOptions : ITraitInfoInterface
 	{
 		IEnumerable<EditorActorOption> ActorOptions(ActorInfo ai, World world);
+	}
+
+	[RequireExplicitImplementation]
+	public interface IProductionPaletteProvider
+	{
+		IList<GenericProductionPaletteIcon> Icons { get; }
+
+		bool HandleEvent(IProductionPaletteIcon icon, MouseButton btn, Modifiers modifiers, WorldRenderer wr);
+
+		void RefreshIcons();
 	}
 
 	public abstract class EditorActorOption
