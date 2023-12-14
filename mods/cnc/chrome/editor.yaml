@@ -513,7 +513,7 @@ Container@EDITOR_WORLD_ROOT:
 							Text: label-filter-actors
 						Button@SELECTION_CANCEL_BUTTON:
 							X: 204
-							Y: 136
+							Y: 202
 							Width: 75
 							Height: 25
 							Text: button-selection-cancel

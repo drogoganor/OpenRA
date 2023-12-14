@@ -32,12 +32,14 @@ namespace OpenRA.Mods.Common.Widgets.Logic
 		readonly BackgroundWidget actorEditPanel;
 		readonly BackgroundWidget areaEditPanel;
 
+		readonly EditorSettings editorSettings;
 		readonly CheckboxWidget copyTerrainCheckbox;
 		readonly CheckboxWidget copyResourcesCheckbox;
 		readonly CheckboxWidget copyActorsCheckbox;
 		readonly EditorActorLayer editorActorLayer;
 
 		MapCopyFilters copyFilters = MapCopyFilters.All;
+		ushort fillTile = 0;
 		EditorClipboard clipboard;
 
 		readonly IResourceLayer resourceLayer;
@@ -48,6 +50,8 @@ namespace OpenRA.Mods.Common.Widgets.Logic
 			this.worldRenderer = worldRenderer;
 
 			editorActorLayer = world.WorldActor.Trait<EditorActorLayer>();
+			editorActionManager = world.WorldActor.Trait<EditorActionManager>();
+			editorSettings = world.WorldActor.Trait<EditorSettings>();
 			resourceLayer = world.WorldActor.Trait<IResourceLayer>();
 
 			editor = widget.Get<EditorViewportControllerWidget>("MAP_EDITOR");
