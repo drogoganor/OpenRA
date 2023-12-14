@@ -37,23 +37,18 @@ namespace OpenRA.Mods.Common.Widgets.Logic
 		readonly CheckboxWidget copyResourcesCheckbox;
 		readonly CheckboxWidget copyActorsCheckbox;
 		readonly EditorActorLayer editorActorLayer;
-		readonly EditorActionManager editorActionManager;
 
 		MapCopyFilters copyFilters = MapCopyFilters.All;
 		EditorClipboard clipboard;
 
-		readonly ITemplatedTerrainInfo terrainInfo;
 		readonly IResourceLayer resourceLayer;
-		readonly World world;
 
 		[ObjectCreator.UseCtor]
 		public MapEditorSelectionLogic(Widget widget, World world, WorldRenderer worldRenderer)
 		{
-			this.world = world;
 			this.worldRenderer = worldRenderer;
 
 			editorActorLayer = world.WorldActor.Trait<EditorActorLayer>();
-			editorActionManager = world.WorldActor.Trait<EditorActionManager>();
 			resourceLayer = world.WorldActor.Trait<IResourceLayer>();
 
 			editor = widget.Get<EditorViewportControllerWidget>("MAP_EDITOR");
@@ -67,8 +62,6 @@ namespace OpenRA.Mods.Common.Widgets.Logic
 			copyTerrainCheckbox = areaEditPanel.Get<CheckboxWidget>("COPY_FILTER_TERRAIN_CHECKBOX");
 			copyResourcesCheckbox = areaEditPanel.Get<CheckboxWidget>("COPY_FILTER_RESOURCES_CHECKBOX");
 			copyActorsCheckbox = areaEditPanel.Get<CheckboxWidget>("COPY_FILTER_ACTORS_CHECKBOX");
-
-			terrainInfo = world.Map.Rules.TerrainInfo as ITemplatedTerrainInfo;
 
 			var copyButton = widget.Get<ButtonWidget>("COPY_BUTTON");
 			copyButton.OnClick = () => clipboard = CopySelectionContents();
