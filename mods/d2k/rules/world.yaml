@@ -259,6 +259,11 @@ EditorWorld:
 				TerrainType: Spice
 				AllowedTerrainTypes: SpiceSand
 				MaxDensity: 20
+	EditorSettings:
+		TerrainClearTiles:
+			Tiles@ARRAKIS:
+				TilesetName: ARRAKIS
+				TileIndices: 0,59,61,88
 	LoadWidgetAtGameStart:
 	EditorSelectionLayer:
 		MainColor: FFFFFF

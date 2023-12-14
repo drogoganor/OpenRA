@@ -314,6 +314,20 @@ EditorWorld:
 				TerrainType: Gems
 				AllowedTerrainTypes: Clear, Road
 				MaxDensity: 3
+	EditorSettings:
+		TerrainClearTiles:
+			Tiles@DESERT:
+				TilesetName: DESERT
+				TileIndices: 255,256
+			Tiles@INTERIOR:
+				TilesetName: INTERIOR
+				TileIndices: 255,275,268
+			Tiles@SNOW:
+				TilesetName: SNOW
+				TileIndices: 255,1
+			Tiles@TEMPERAT:
+				TilesetName: TEMPERAT
+				TileIndices: 255,1
 	LoadWidgetAtGameStart:
 	EditorSelectionLayer:
 		MainColor: FFFFFF
@@ -323,3 +337,4 @@ EditorWorld:
 	EditorActionManager:
 	BuildableTerrainOverlay:
 		AllowedTerrainTypes: Clear, Road
+

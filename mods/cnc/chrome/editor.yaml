@@ -492,7 +492,7 @@ Container@EDITOR_WORLD_ROOT:
 							Height: 25
 							Font: Bold
 							Align: Left
-							Text: label-copy-filters
+							Text: label-copy-clear-filters
 						Checkbox@COPY_FILTER_TERRAIN_CHECKBOX:
 							X: 11
 							Y: 61
@@ -511,6 +511,36 @@ Container@EDITOR_WORLD_ROOT:
 							Width: PARENT_RIGHT - 29
 							Height: 20
 							Text: label-filter-actors
+						Label@TILE_CLEAR_TITLE:
+							X: 6
+							Y: 136
+							Width: 265
+							Height: 25
+							Align: Left
+							Font: Bold
+							Text: label-clear-tiles
+						ScrollPanel@TILE_CLEAR_PANEL:
+							X: 6
+							Y: 161
+							Width: PARENT_RIGHT - 12
+							Height: 36
+							TopBottomSpacing: 1
+							ItemSpacing: 1
+							ScrollBar: Hidden
+							ContentHeight: 32
+							Background: scrollpanel-bg
+							Children:
+								ScrollItem@TILE_CLEAR_TEMPLATE:
+									Visible: false
+									Height: 34
+									Width: 34
+									IgnoreChildMouseOver: true
+									Children:
+										TerrainTemplatePreview@TILE_PREVIEW:
+											X: 1
+											Y: 1
+											Width: 32
+											Height: 32
 						Button@SELECTION_CANCEL_BUTTON:
 							X: 204
 							Y: 202
@@ -759,6 +789,17 @@ Container@EDITOR_WORLD_ROOT:
 			Key: EditorPaste
 			TooltipTemplate: BUTTON_TOOLTIP
 			TooltipText: button-editor-world-root-paste.tooltip
+			TooltipContainer: TOOLTIP_CONTAINER
+		Button@CLEAR_BUTTON:
+			X: WINDOW_RIGHT - 435
+			Y: 5
+			Height: 25
+			Width: 100
+			Text: button-editor-world-root-clear.label
+			Font: Bold
+			Key: EditorClear
+			TooltipTemplate: BUTTON_TOOLTIP
+			TooltipText: button-editor-world-root-clear.tooltip
 			TooltipContainer: TOOLTIP_CONTAINER
 		Label@COORDINATE_LABEL:
 			X: 10

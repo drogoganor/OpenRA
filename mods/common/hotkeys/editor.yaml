@@ -20,6 +20,11 @@ EditorCopy: C Ctrl
 	Platform:
 		OSX: C Meta
 
+EditorClear: Delete
+	Description: Clear
+	Types: Editor
+	Contexts: Editor
+
 EditorQuickSave: S Ctrl
 	Description: Save Map
 	Types: Editor

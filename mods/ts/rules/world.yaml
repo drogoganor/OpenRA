@@ -419,6 +419,14 @@ EditorWorld:
 				AllowedTerrainTypes: Clear, Rough, DirtRoad
 				MaxDensity: 2
 		VeinholeActors: veinhole
+	EditorSettings:
+		TerrainClearTiles:
+			Tiles@SNOW:
+				TilesetName: SNOW
+				TileIndices: 0,4
+			Tiles@TEMPERATE:
+				TilesetName: TEMPERATE
+				TileIndices: 0,4
 	LoadWidgetAtGameStart:
 	EditorSelectionLayer:
 		MainColor: FFFFFF

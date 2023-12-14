@@ -797,6 +797,13 @@ notification-time-limit-expired = Time limit has expired.
 ## EditorActorBrush
 notification-added-actor = Added { $name } ({ $id })
 
+## EditorSelectionLogic
+notification-cleared-tiles =
+    { $amount ->
+       [one] Cleared one tile
+      *[other] Cleared { $amount } tiles
+    }
+
 ## EditorCopyPasteBrush
 notification-copied-tiles =
     { $amount ->

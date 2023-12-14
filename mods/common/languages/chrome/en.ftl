@@ -73,10 +73,11 @@ label-actors-bg-search = Search:
 label-actors-bg-categories = Filter:
 label-actors-bg-owners = Owner:
 label-area-selection = Area Selection
-label-copy-filters = Copy Filters
+label-copy-clear-filters = Copy/Clear Filters
 label-filter-terrain = Terrain
 label-filter-resources = Resources
 label-filter-actors = Actors
+label-clear-tiles = Clear Tiles
 button-selection-cancel = Cancel
 label-show-tile-grid = Show Tile Grid
 label-show-buildable-area = Show Buildable Area
@@ -116,6 +117,10 @@ button-editor-world-root-copy =
 button-editor-world-root-paste =
    .label = Paste
    .tooltip = Paste
+
+button-editor-world-root-clear =
+   .label = Clear
+   .tooltip = Clear
 
 button-editor-world-root-undo =
    .label = Undo
