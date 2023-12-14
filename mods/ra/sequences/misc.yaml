@@ -176,6 +176,11 @@ v2:
 		Facings: 32
 		ZOffset: 1023
 
+mirrortile:
+	idle:
+		Filename: bits/mirror-tiles.png
+		Length: 7
+
 rallypoint:
 	flag:
 		Filename: flagfly.shp

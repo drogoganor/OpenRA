@@ -605,6 +605,94 @@ Container@EDITOR_WORLD_ROOT:
 							Width: PARENT_RIGHT - 29
 							Height: 20
 							Text: label-show-buildable-area
+						Checkbox@SHOW_MIRROR_LAYER:
+							X: 6
+							Y: 57
+							Width: PARENT_RIGHT - 29
+							Height: 20
+							Text: Show Mirror Layer
+						Label@MIRROR_TILE_TITLE:
+							X: 6
+							Y: 82
+							Width: 265
+							Height: 25
+							Align: Left
+							Font: Bold
+							Text: Mirror Tile Paint Color
+						ScrollPanel@MIRROR_TILE_COLOR_PANEL:
+							X: 6
+							Y: 107
+							Width: PARENT_RIGHT - 13
+							Height: 34
+							TopBottomSpacing: 1
+							ItemSpacing: 0
+							ScrollBar: Hidden
+							ContentHeight: 32
+							Background: scrollpanel-bg
+							Children:
+								ScrollItem@MIRROR_TILE_COLOR_TEMPLATE:
+									Visible: false
+									Height: 32
+									Width: 32
+									#TooltipContainer: TOOLTIP_CONTAINER
+									#TooltipTemplate: SIMPLE_TOOLTIP
+									IgnoreChildMouseOver: true
+									Children:
+										ColorBlock@MIRROR_TILE_PREVIEW:
+											X: 4
+											Y: 4
+											Width: 24
+											Height: 24
+						Label@MIRROR_NUM_SIDES_LABEL:
+							X: 6
+							Y: 148
+							Width: 265
+							Height: 25
+							Align: Left
+							Text: Number of Sides
+						Slider@MIRROR_NUM_SIDES_SLIDER:
+							X: 130
+							Y: 148
+							Width: 128
+							Height: 25
+						Label@MIRROR_NUM_SIDES_VALUE:
+							X: 260
+							Y: 148
+							Width: 30
+							Height: 25
+							Align: Left
+							Text: 2
+						Label@MIRROR_METHOD_LABEL:
+							X: 6
+							Y: 178
+							Width: 265
+							Height: 25
+							Align: Left
+							Text: Mirror Method
+						DropDownButton@MIRROR_METHOD_DROPDOWN:
+							X: 130
+							Y: 178
+							Width: 158
+							Height: 25
+						Label@MIRROR_START_ANGLE_LABEL:
+							X: 6
+							Y: 208
+							Width: 265
+							Height: 25
+							Align: Left
+							Text: Start Angle
+						Slider@MIRROR_START_ANGLE_SLIDER:
+							X: 130
+							Y: 208
+							Width: 128
+							Height: 25
+						Label@MIRROR_START_ANGLE_VALUE:
+							X: 260
+							Y: 208
+							Width: 30
+							Height: 25
+							Align: Left
+							Text: 0
 		Container@HISTORY_WIDGETS:
 			Logic: HistoryLogLogic
 			Visible: false

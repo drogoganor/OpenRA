@@ -314,6 +314,10 @@ EditorWorld:
 				TerrainType: Gems
 				AllowedTerrainTypes: Clear, Road
 				MaxDensity: 3
+	MirrorLayerOverlay:
+		TileImage: mirrortile
+		TileSequence: idle
+		Colors: FF0000, FF7F00, FFEE07, 00FF21, 00FFFF, 002AFF, A500FF
 	LoadWidgetAtGameStart:
 	EditorSelectionLayer:
 		MainColor: FFFFFF
