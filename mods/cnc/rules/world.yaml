@@ -292,8 +292,12 @@ EditorWorld:
 				TerrainType: BlueTiberium
 				AllowedTerrainTypes: Clear, Road
 				MaxDensity: 12
-	EditorSelectionLayer:
 	LoadWidgetAtGameStart:
+	EditorSelectionLayer:
+		MainColor: FFFFFF
+		AltColor: 000000
+		PasteColor: 4CFF00
+		AltPixelOffset: 1,1
 	EditorActionManager:
 	BuildableTerrainOverlay:
 		AllowedTerrainTypes: Clear, Road

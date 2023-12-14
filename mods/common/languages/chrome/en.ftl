@@ -72,6 +72,14 @@ label-tiles-bg-categories = Filter:
 label-actors-bg-search = Search:
 label-actors-bg-categories = Filter:
 label-actors-bg-owners = Owner:
+label-area-selection = Area Selection
+label-copy-filters = Copy Filters
+label-filter-terrain = Terrain
+label-filter-resources = Resources
+label-filter-actors = Actors
+button-selection-cancel = Cancel
+label-show-tile-grid = Show Tile Grid
+label-show-buildable-area = Show Buildable Area
 
 button-map-editor-tab-container-tiles =
    .label = Tiles
@@ -89,15 +97,25 @@ button-map-editor-tab-container-history =
    .label = History
    .tooltip = History
 
+button-map-editor-tab-container-paint =
+   .label = Paint
+   .tooltip = Paint
+
+button-map-editor-tab-container-tools =
+   .label = Tools
+   .tooltip = Tools
+
 button-editor-world-root-options =
    .label = Menu
    .tooltip = Menu
 
-button-editor-world-root-copypaste =
-   .label = Copy/Paste
+button-editor-world-root-copy =
+   .label = Copy
    .tooltip = Copy
 
-dropdownbutton-editor-world-root-copyfilter-button = Copy Filters
+button-editor-world-root-paste =
+   .label = Paste
+   .tooltip = Paste
 
 button-editor-world-root-undo =
    .label = Undo
@@ -107,7 +125,6 @@ button-editor-world-root-redo =
    .label = Redo
    .tooltip = Redo last step
 
-dropdownbutton-editor-world-root-overlay-button = Overlays
 button-select-categories-buttons-all = All
 button-select-categories-buttons-none = None
 

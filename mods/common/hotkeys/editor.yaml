@@ -27,6 +27,13 @@ EditorQuickSave: S Ctrl
 	Platform:
 		OSX: S Meta
 
+EditorPaste: V Ctrl
+	Description: Paste
+	Types: Editor
+	Contexts: Editor
+	Platform:
+		OSX: V Meta
+
 EditorTilesTab: E
 	Description: Tiles Tab
 	Types: Editor
@@ -44,6 +51,16 @@ EditorActorsTab: T
 
 EditorHistoryTab: Y
 	Description: History Tab
+	Types: Editor
+	Contexts: Editor
+
+EditorPaintTab: U
+	Description: Paint Tab
+	Types: Editor
+	Contexts: Editor
+
+EditorSettingsTab: I
+	Description: Settings Tab
 	Types: Editor
 	Contexts: Editor
 

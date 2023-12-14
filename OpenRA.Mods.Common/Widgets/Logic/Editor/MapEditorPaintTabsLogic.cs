@@ -13,24 +13,23 @@ using OpenRA.Widgets;
 
 namespace OpenRA.Mods.Common.Widgets.Logic
 {
-	public class MapEditorTabsLogic : ChromeLogic
+	public class MapEditorPaintTabsLogic : ChromeLogic
 	{
 		readonly Widget widget;
 
-		protected enum MenuType { Tiles, Layers, Actors, History }
+		protected enum MenuType { Tiles, Layers, Actors }
 		protected MenuType menuType = MenuType.Tiles;
 		readonly Widget tabContainer;
 
 		[ObjectCreator.UseCtor]
-		public MapEditorTabsLogic(Widget widget)
+		public MapEditorPaintTabsLogic(Widget widget)
 		{
 			this.widget = widget;
-			tabContainer = widget.Get("MAP_EDITOR_TAB_CONTAINER");
+			tabContainer = widget.Get("PAINT_TAB_CONTAINER");
 
 			SetupTab("TILES_TAB", "TILE_WIDGETS", MenuType.Tiles);
 			SetupTab("OVERLAYS_TAB", "LAYER_WIDGETS", MenuType.Layers);
 			SetupTab("ACTORS_TAB", "ACTOR_WIDGETS", MenuType.Actors);
-			SetupTab("HISTORY_TAB", "HISTORY_WIDGETS", MenuType.History);
 		}
 
 		void SetupTab(string buttonId, string tabId, MenuType tabType)

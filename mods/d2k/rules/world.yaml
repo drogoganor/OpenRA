@@ -259,8 +259,12 @@ EditorWorld:
 				TerrainType: Spice
 				AllowedTerrainTypes: SpiceSand
 				MaxDensity: 20
-	EditorSelectionLayer:
 	LoadWidgetAtGameStart:
+	EditorSelectionLayer:
+		MainColor: FFFFFF
+		AltColor: 000000
+		PasteColor: 4CFF00
+		AltPixelOffset: 1,1
 	EditorActionManager:
 	BuildableTerrainOverlay:
 		AllowedTerrainTypes: Rock, Concrete

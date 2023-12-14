@@ -52,7 +52,7 @@ namespace OpenRA.Mods.Common.Widgets.Logic
 			ModData = modData;
 			World = world;
 			WorldRenderer = worldRenderer;
-			Editor = widget.Parent.Get<EditorViewportControllerWidget>("MAP_EDITOR");
+			Editor = widget.Parent.Parent.Get<EditorViewportControllerWidget>("MAP_EDITOR");
 			Panel = widget.Get<ScrollPanelWidget>(templateListId);
 			ItemTemplate = Panel.Get<ScrollItemWidget>(previewTemplateId);
 			Panel.Layout = new GridLayout(Panel);
