@@ -49,13 +49,13 @@ EditorActorsTab: T
 	Types: Editor
 	Contexts: Editor
 
-EditorHistoryTab: Y
-	Description: History Tab
+EditorToolsTab: Y
+	Description: Tools Tab
 	Types: Editor
 	Contexts: Editor
 
-EditorPaintTab: U
-	Description: Paint Tab
+EditorHistoryTab: U
+	Description: History Tab
 	Types: Editor
 	Contexts: Editor
 

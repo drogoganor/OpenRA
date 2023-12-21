@@ -88,7 +88,9 @@ namespace OpenRA.Mods.Common.Widgets.Logic
 			editorActionManager = world.WorldActor.Trait<EditorActionManager>();
 
 			editor = widget.Parent.Parent.Get<EditorViewportControllerWidget>("MAP_EDITOR");
-			actorEditPanel = widget.Get<BackgroundWidget>("ACTOR_EDIT_PANEL");
+			var selectTabContainer = widget.Parent.Parent.Get<ContainerWidget>("SELECT_WIDGETS");
+
+			actorEditPanel = selectTabContainer.Get<BackgroundWidget>("ACTOR_EDIT_PANEL");
 
 			typeLabel = actorEditPanel.Get<LabelWidget>("ACTOR_TYPE_LABEL");
 			actorIDField = actorEditPanel.Get<TextFieldWidget>("ACTOR_ID");

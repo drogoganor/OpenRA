@@ -702,7 +702,7 @@ Container@EDITOR_WORLD_ROOT:
 					Height: 25
 					Text: button-map-editor-tab-container-tools.label
 					Font: Bold
-					Key: EditorSettingsTab
+					Key: EditorToolsTab
 					TooltipTemplate: BUTTON_TOOLTIP
 					TooltipText: button-map-editor-tab-container-tools.tooltip
 					TooltipContainer: TOOLTIP_CONTAINER

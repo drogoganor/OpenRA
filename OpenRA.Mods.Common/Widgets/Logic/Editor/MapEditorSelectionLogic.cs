@@ -11,9 +11,9 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using DiscordRPC;
 using OpenRA.Graphics;
 using OpenRA.Mods.Common.EditorBrushes;
-using OpenRA.Mods.Common.Terrain;
 using OpenRA.Mods.Common.Traits;
 using OpenRA.Widgets;
 
@@ -53,8 +53,10 @@ namespace OpenRA.Mods.Common.Widgets.Logic
 
 			editor = widget.Get<EditorViewportControllerWidget>("MAP_EDITOR");
 
-			actorEditPanel = widget.Get<BackgroundWidget>("ACTOR_EDIT_PANEL");
-			areaEditPanel = widget.Get<BackgroundWidget>("AREA_EDIT_PANEL");
+			var selectTabContainer = widget.Get("SELECT_WIDGETS");
+
+			actorEditPanel = selectTabContainer.Get<BackgroundWidget>("ACTOR_EDIT_PANEL");
+			areaEditPanel = selectTabContainer.Get<BackgroundWidget>("AREA_EDIT_PANEL");
 
 			actorEditPanel.IsVisible = () => editor.CurrentBrush == editor.DefaultBrush && editor.DefaultBrush.Selection.Actor != null;
 			areaEditPanel.IsVisible = () => !actorEditPanel.IsVisible();

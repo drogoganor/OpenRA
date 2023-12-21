@@ -243,23 +243,17 @@ Container@EDITOR_WORLD_ROOT:
 					Y: 10
 					Width: PARENT_RIGHT - 19
 					Height: PARENT_BOTTOM - 19
-		Background@PALETTE_BG:
-			X: WINDOW_RIGHT - 320
-			Y: 360
-			Width: 310
-			Height: WINDOW_BOTTOM - 452
-		Container@PAINT_WIDGETS:
-			X: WINDOW_RIGHT - 320
-			Y: 360
+		Container@TILE_WIDGETS:
+			Logic: TileSelectorLogic
 			Children:
-				Container@TILE_WIDGETS:
-					Logic: TileSelectorLogic
-					Y: 30
+				Background@TILES_BG:
+					X: WINDOW_RIGHT - 320
+					Y: 360
 					Width: 310
-					Height: WINDOW_BOTTOM - 482
+					Height: WINDOW_BOTTOM - 452
 					Children:
 						Label@SEARCH_LABEL:
-							Y: 8
+							Y: 12
 							Width: 55
 							Height: 25
 							Text: label-tiles-bg-search
@@ -267,11 +261,11 @@ Container@EDITOR_WORLD_ROOT:
 							Font: TinyBold
 						TextField@SEARCH_TEXTFIELD:
 							X: 60
-							Y: 6
+							Y: 10
 							Width: PARENT_RIGHT - 70
 							Height: 25
 						Label@CATEGORIES_LABEL:
-							Y: 32
+							Y: 36
 							Width: 55
 							Height: 25
 							Text: label-tiles-bg-categories
@@ -279,15 +273,15 @@ Container@EDITOR_WORLD_ROOT:
 							Font: TinyBold
 						DropDownButton@CATEGORIES_DROPDOWN:
 							X: 60
-							Y: 30
+							Y: 34
 							Width: PARENT_RIGHT - 70
 							Height: 25
 							Font: Bold
 						ScrollPanel@TILETEMPLATE_LIST:
 							X: 10
-							Y: 54
+							Y: 58
 							Width: PARENT_RIGHT - 20
-							Height: PARENT_BOTTOM - 64
+							Height: PARENT_BOTTOM - 68
 							TopBottomSpacing: 4
 							ItemSpacing: 4
 							Children:
@@ -299,18 +293,21 @@ Container@EDITOR_WORLD_ROOT:
 										TerrainTemplatePreview@TILE_PREVIEW:
 											X: 4
 											Y: 4
-				Container@LAYER_WIDGETS:
-					Visible: false
-					Logic: LayerSelectorLogic
-					Y: 30
+		Container@LAYER_WIDGETS:
+			Visible: false
+			Logic: LayerSelectorLogic
+			Children:
+				Background@LAYERS_BG:
+					X: WINDOW_RIGHT - 320
+					Y: 360
 					Width: 310
-					Height: WINDOW_BOTTOM - 482
+					Height: WINDOW_BOTTOM - 452
 					Children:
 						ScrollPanel@LAYERTEMPLATE_LIST:
 							X: 10
-							Y: 6
+							Y: 10
 							Width: PARENT_RIGHT - 20
-							Height: PARENT_BOTTOM - 16
+							Height: PARENT_BOTTOM - 20
 							TopBottomSpacing: 4
 							ItemSpacing: 4
 							Children:
@@ -323,15 +320,18 @@ Container@EDITOR_WORLD_ROOT:
 											X: 4
 											Y: 4
 											Visible: false
-				Container@ACTOR_WIDGETS:
-					Visible: false
-					Logic: ActorSelectorLogic
-					Y: 30
+		Container@ACTOR_WIDGETS:
+			Visible: false
+			Logic: ActorSelectorLogic
+			Children:
+				Background@ACTORS_BG:
+					X: WINDOW_RIGHT - 320
+					Y: 360
 					Width: 310
-					Height: WINDOW_BOTTOM - 476
+					Height: WINDOW_BOTTOM - 452
 					Children:
 						Label@SEARCH_LABEL:
-							Y: 8
+							Y: 12
 							Width: 55
 							Height: 25
 							Text: label-actors-bg-search
@@ -339,11 +339,11 @@ Container@EDITOR_WORLD_ROOT:
 							Font: TinyBold
 						TextField@SEARCH_TEXTFIELD:
 							X: 60
-							Y: 6
+							Y: 10
 							Width: PARENT_RIGHT - 70
 							Height: 25
 						Label@CATEGORIES_LABEL:
-							Y: 32
+							Y: 36
 							Width: 55
 							Height: 25
 							Text: label-actors-bg-categories
@@ -351,12 +351,12 @@ Container@EDITOR_WORLD_ROOT:
 							Font: TinyBold
 						DropDownButton@CATEGORIES_DROPDOWN:
 							X: 60
-							Y: 30
+							Y: 34
 							Width: PARENT_RIGHT - 70
 							Height: 25
 							Font: Bold
 						Label@OWNERS_LABEL:
-							Y: 56
+							Y: 60
 							Width: 55
 							Height: 25
 							Text: label-actors-bg-owners
@@ -364,15 +364,15 @@ Container@EDITOR_WORLD_ROOT:
 							Font: TinyBold
 						DropDownButton@OWNERS_DROPDOWN:
 							X: 60
-							Y: 54
+							Y: 58
 							Width: PARENT_RIGHT - 70
 							Height: 25
 							Font: Bold
 						ScrollPanel@ACTORTEMPLATE_LIST:
 							X: 10
-							Y: 78
+							Y: 82
 							Width: PARENT_RIGHT - 20
-							Height: PARENT_BOTTOM - 94
+							Height: PARENT_BOTTOM - 92
 							TopBottomSpacing: 4
 							ItemSpacing: 4
 							Children:
@@ -387,131 +387,142 @@ Container@EDITOR_WORLD_ROOT:
 											X: 4
 											Y: 4
 											Visible: true
-				Container@PAINT_TAB_CONTAINER:
-					Logic: MapEditorPaintTabsLogic
-					X: 10
-					Y: 10
-					Width: 300
-					Height: 25
+		Container@TOOLS_WIDGETS:
+			Visible: false
+			Children:
+				Background@TOOLS_EDIT_PANEL:
+					X: WINDOW_RIGHT - 320
+					Y: 360
+					Width: 310
+					Height: WINDOW_BOTTOM - 452
 					Children:
-						Button@TILES_TAB:
-							X: 0
-							Width: 97
-							Height: 25
-							Text: button-map-editor-tab-container-tiles.label
-							Font: Bold
-							Key: EditorTilesTab
-							TooltipTemplate: BUTTON_TOOLTIP
-							TooltipText: button-map-editor-tab-container-tiles.tooltip
-							TooltipContainer: TOOLTIP_CONTAINER
-						Button@OVERLAYS_TAB:
-							X: 97
-							Width: 96
-							Height: 25
-							Text: button-map-editor-tab-container-overlays.label
-							Font: Bold
-							Key: EditorOverlaysTab
-							TooltipTemplate: BUTTON_TOOLTIP
-							TooltipText: button-map-editor-tab-container-overlays.tooltip
-							TooltipContainer: TOOLTIP_CONTAINER
-						Button@ACTORS_TAB:
-							X: 193
-							Width: 97
-							Height: 25
-							Text: button-map-editor-tab-container-actors.label
-							Font: Bold
-							Key: EditorActorsTab
-							TooltipTemplate: BUTTON_TOOLTIP
-							TooltipText: button-map-editor-tab-container-actors.tooltip
-							TooltipContainer: TOOLTIP_CONTAINER
+						Checkbox@SHOW_TILE_GRID:
+							X: 15
+							Y: 15
+							Width: PARENT_RIGHT - 15
+							Height: 20
+							Text: label-show-tile-grid
+						Checkbox@SHOW_BUILDABLE_AREA:
+							X: 15
+							Y: 40
+							Width: PARENT_RIGHT - 15
+							Height: 20
+							Text: label-show-buildable-area
+		Container@HISTORY_WIDGETS:
+			Logic: HistoryLogLogic
+			Visible: false
+			Children:
+				Background@HISTORY_BG:
+					X: WINDOW_RIGHT - 320
+					Y: 360
+					Width: 310
+					Height: WINDOW_BOTTOM - 452
+					Children:
+						ScrollPanel@HISTORY_LIST:
+							X: 10
+							Y: 10
+							Width: PARENT_RIGHT - 20
+							Height: PARENT_BOTTOM - 20
+							CollapseHiddenChildren: True
+							TopBottomSpacing: 4
+							ItemSpacing: 4
+							Children:
+								ScrollItem@HISTORY_TEMPLATE:
+									X: 4
+									Visible: false
+									Width: PARENT_RIGHT - 31
+									Height: 25
+									IgnoreChildMouseOver: true
+									TextColor: ffffff
+									TextColorDisabled: 8f8f8f
+									Children:
+										Label@TITLE:
+											X: 5
+											Width: PARENT_RIGHT
+											Height: 25
+											Align: Left
 		Container@SELECT_WIDGETS:
 			Visible: false
 			X: WINDOW_RIGHT - 320
 			Y: 360
 			Children:
 				Background@AREA_EDIT_PANEL:
-					X: 9
-					Y: 9
-					Width: 292
-					Height: WINDOW_BOTTOM - 470
-					Background: scrollpanel-bg
+					Width: 310
+					Height: WINDOW_BOTTOM - 452
 					Children:
 						Label@AREA_EDIT_TITLE:
-							X: 6
-							Y: 7
-							Width: 265
+							X: 15
+							Y: 16
+							Width: 281
 							Height: 24
 							Align: Center
 							Font: Bold
 							Text: label-area-selection
 						Label@AREA_FILTERS_LABEL:
-							X: 6
-							Y: 36
+							X: 15
+							Y: 45
 							Width: 55
 							Height: 25
 							Font: Bold
 							Align: Left
 							Text: label-copy-filters
 						Checkbox@COPY_FILTER_TERRAIN_CHECKBOX:
-							X: 11
-							Y: 61
+							X: 15
+							Y: 70
 							Width: PARENT_RIGHT - 29
 							Height: 20
 							Text: label-filter-terrain
 						Checkbox@COPY_FILTER_RESOURCES_CHECKBOX:
-							X: 11
-							Y: 86
+							X: 15
+							Y: 95
 							Width: PARENT_RIGHT - 29
 							Height: 20
 							Text: label-filter-resources
 						Checkbox@COPY_FILTER_ACTORS_CHECKBOX:
-							X: 11
-							Y: 111
+							X: 15
+							Y: 120
 							Width: PARENT_RIGHT - 29
 							Height: 20
 							Text: label-filter-actors
 						Button@SELECTION_CANCEL_BUTTON:
-							X: 212
-							Y: 136
+							X: 222
+							Y: 145
 							Width: 75
 							Height: 25
 							Text: button-selection-cancel
 							Font: Bold
 				Background@ACTOR_EDIT_PANEL:
-					X: 9
-					Y: 9
-					Width: 292
-					Height: WINDOW_BOTTOM - 470
-					Background: scrollpanel-bg
+					Width: 310
+					Height: WINDOW_BOTTOM - 452
 					Children:
 						Label@ACTOR_TYPE_LABEL:
-							X: 6
-							Y: 7
-							Width: PARENT_RIGHT - 12
+							X: 15
+							Y: 16
+							Width: 281
 							Height: 24
 							Align: Center
 							Font: Bold
 						Label@ACTOR_ID_LABEL:
-							X: 6
-							Y: 38
+							X: 15
+							Y: 45
 							Width: 55
 							Height: 25
 							Text: label-actor-edit-panel-id
 							Align: Right
 						TextField@ACTOR_ID:
-							X: 75
-							Y: 36
-							Width: PARENT_RIGHT - 80
+							X: 84
+							Y: 45
+							Width: 208
 							Height: 25
 						Label@ACTOR_ID_ERROR_LABEL:
-							X: 75
-							Y: 62
-							Width: PARENT_RIGHT - 80
+							X: 84
+							Y: 71
+							Width: 208
 							Height: 15
 							Font: TinyBold
 							TextColor: FF0000
 						Container@ACTOR_INIT_CONTAINER:
-							Y: 64
+							Y: 73
 							Width: PARENT_RIGHT
 							Children:
 								Container@CHECKBOX_OPTION_TEMPLATE:
@@ -519,16 +530,16 @@ Container@EDITOR_WORLD_ROOT:
 									Height: 22
 									Children:
 										Checkbox@OPTION:
-											X: 75
+											X: 84
 											Y: 1
-											Width: PARENT_RIGHT - 75
+											Width: PARENT_RIGHT - 100
 											Height: 20
 								Container@SLIDER_OPTION_TEMPLATE:
 									Width: PARENT_RIGHT
 									Height: 22
 									Children:
 										Label@LABEL:
-											X: 6
+											X: 15
 											Y: 1
 											Width: 55
 											Height: 16
@@ -536,10 +547,10 @@ Container@EDITOR_WORLD_ROOT:
 										Slider@OPTION:
 											X: 75
 											Y: 1
-											Width: 160
+											Width: 165
 											Height: 20
 										TextField@VALUE:
-											X: 237
+											X: 242
 											Y: 1
 											Width: 50
 											Height: 20
@@ -549,121 +560,88 @@ Container@EDITOR_WORLD_ROOT:
 									Height: 27
 									Children:
 										Label@LABEL:
-											X: 6
+											X: 15
 											Y: 2
 											Width: 55
 											Height: 24
 											Align: Right
 										DropDownButton@OPTION:
-											X: 75
+											X: 84
 											Y: 1
-											Width: 212
+											Width: 208
 											Height: 25
 											Font: Bold
 						Container@BUTTON_CONTAINER:
 							Y: 75
 							Children:
 								Button@DELETE_BUTTON:
-									X: 5
+									X: 15
 									Width: 75
 									Height: 25
 									Text: button-container-delete
 									Font: Bold
 								Button@CANCEL_BUTTON:
-									X: 132
+									X: 142
 									Width: 75
 									Height: 25
 									Text: button-container-cancel
 									Font: Bold
 								Button@OK_BUTTON:
-									X: 212
+									X: 222
 									Width: 75
 									Height: 25
 									Text: button-container-ok
 									Font: Bold
-		Container@TOOLS_WIDGETS:
-			Visible: false
-			X: WINDOW_RIGHT - 320
-			Y: 360
-			Children:
-				Background@TOOLS_EDIT_PANEL:
-					X: 9
-					Y: 9
-					Width: 292
-					Height: WINDOW_BOTTOM - 470
-					Background: scrollpanel-bg
-					Children:
-						Checkbox@SHOW_TILE_GRID:
-							X: 6
-							Y: 7
-							Width: PARENT_RIGHT - 29
-							Height: 20
-							Text: label-show-tile-grid
-						Checkbox@SHOW_BUILDABLE_AREA:
-							X: 6
-							Y: 32
-							Width: PARENT_RIGHT - 29
-							Height: 20
-							Text: label-show-buildable-area
-		Container@HISTORY_WIDGETS:
-			Logic: HistoryLogLogic
-			Visible: false
-			X: WINDOW_RIGHT - 320
-			Y: 360
-			Children:
-				ScrollPanel@HISTORY_LIST:
-					X: 9
-					Y: 9
-					Width: 292
-					Height: WINDOW_BOTTOM - 470
-					CollapseHiddenChildren: True
-					TopBottomSpacing: 4
-					ItemSpacing: 4
-					Children:
-						ScrollItem@HISTORY_TEMPLATE:
-							X: 4
-							Visible: false
-							Width: PARENT_RIGHT - 31
-							Height: 25
-							IgnoreChildMouseOver: true
-							TextColor: ffffff
-							TextColorDisabled: 8f8f8f
-							Children:
-								Label@TITLE:
-									X: 5
-									Width: PARENT_RIGHT
-									Height: 25
-									Align: Left
-		Container@MAIN_TAB_CONTAINER:
-			Logic: MapEditorMainTabsLogic
+		Container@MAP_EDITOR_TAB_CONTAINER:
+			Logic: MapEditorTabsLogic
 			X: WINDOW_RIGHT - 315
 			Y: 330
 			Width: 310
 			Height: 25
 			Children:
-				Button@PAINT_TAB:
+				Button@TILES_TAB:
 					X: 0
-					Width: 100
+					Width: 50
 					Height: 25
-					Text: button-map-editor-tab-container-paint.label
+					Text: button-map-editor-tab-container-tiles.label
 					Font: Bold
-					Key: EditorPaintTab
+					Key: EditorTilesTab
 					TooltipTemplate: BUTTON_TOOLTIP
-					TooltipText: button-map-editor-tab-container-paint.tooltip
+					TooltipText: button-map-editor-tab-container-tiles.tooltip
+					TooltipContainer: TOOLTIP_CONTAINER
+				Button@OVERLAYS_TAB:
+					X: 50
+					Width: 75
+					Height: 25
+					Text: button-map-editor-tab-container-overlays.label
+					Font: Bold
+					Key: EditorOverlaysTab
+					TooltipTemplate: BUTTON_TOOLTIP
+					TooltipText: button-map-editor-tab-container-overlays.tooltip
+					TooltipContainer: TOOLTIP_CONTAINER
+				Button@ACTORS_TAB:
+					X: 125
+					Width: 60
+					Height: 25
+					Text: button-map-editor-tab-container-actors.label
+					Font: Bold
+					Key: EditorActorsTab
+					TooltipTemplate: BUTTON_TOOLTIP
+					TooltipText: button-map-editor-tab-container-actors.tooltip
 					TooltipContainer: TOOLTIP_CONTAINER
 				Button@TOOLS_TAB:
-					X: 100
-					Width: 100
+					X: 185
+					Width: 50
 					Height: 25
 					Text: button-map-editor-tab-container-tools.label
 					Font: Bold
-					Key: EditorSettingsTab
+					Key: EditorToolsTab
 					TooltipTemplate: BUTTON_TOOLTIP
 					TooltipText: button-map-editor-tab-container-tools.tooltip
 					TooltipContainer: TOOLTIP_CONTAINER
 				Button@HISTORY_TAB:
-					X: 200
-					Width: 100
+					X: 235
+					Width: 65
 					Height: 25
 					Text: button-map-editor-tab-container-history.label
 					Font: Bold
