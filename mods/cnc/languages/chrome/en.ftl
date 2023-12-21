@@ -93,17 +93,13 @@ button-map-editor-tab-container-actors =
    .label = Actors
    .tooltip = Actors
 
-button-map-editor-tab-container-history =
-   .label = History
-   .tooltip = History
-
-button-map-editor-tab-container-paint =
-   .label = Paint
-   .tooltip = Paint
-
 button-map-editor-tab-container-tools =
    .label = Tools
    .tooltip = Tools
+
+button-map-editor-tab-container-history =
+   .label = History
+   .tooltip = History
 
 button-editor-world-root-copy =
    .label = Copy
