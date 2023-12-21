@@ -22,6 +22,8 @@ namespace OpenRA.Mods.Common.Widgets.Logic
 		protected MenuType menuType = MenuType.Tiles;
 		readonly Widget tabContainer;
 
+		MenuType lastSelectedTab = MenuType.Tiles;
+
 		[ObjectCreator.UseCtor]
 		public MapEditorTabsLogic(Widget widget)
 		{
@@ -58,6 +60,9 @@ namespace OpenRA.Mods.Common.Widgets.Logic
 				editor.DefaultBrush.ClearSelection();
 			}
 
+			if (newMenuType != MenuType.Select)
+				lastSelectedTab = newMenuType;
+
 			return newMenuType;
 		}
 
@@ -68,7 +73,7 @@ namespace OpenRA.Mods.Common.Widgets.Logic
 			if (menuType != MenuType.Select && (actor != null || area != null))
 				menuType = MenuType.Select;
 			else if (menuType == MenuType.Select && actor == null && area == null)
-				menuType = MenuType.Tiles;
+				menuType = lastSelectedTab;
 		}
 	}
 }
