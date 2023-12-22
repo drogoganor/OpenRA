@@ -11,7 +11,6 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using DiscordRPC;
 using OpenRA.Graphics;
 using OpenRA.Mods.Common.EditorBrushes;
 using OpenRA.Mods.Common.Traits;
