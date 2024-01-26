@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Newtonsoft.Json;
 using OpenRA.FileSystem;
 using OpenRA.Mods.Common.Traits;
 using OpenRA.Widgets;
@@ -300,6 +301,8 @@ namespace OpenRA.Mods.Common.Widgets.Logic
 			}
 
 			saveMap(combinedPath);
+
+			SaveMapMirrorTiles(map, modData, world);
 		}
 
 		public static void SaveMapInner(Map map, IReadWritePackage package, World world, ModData modData)
@@ -343,6 +346,34 @@ namespace OpenRA.Mods.Common.Widgets.Logic
 						actionManager.SaveFailed = false;
 				},
 				confirmText: SaveMapFailedConfirm);
+		}
+
+		static void SaveMapMirrorTiles(Map map, ModData modData, World world)
+		{
+			try
+			{
+				var mirrorLayerOverlay = world.WorldActor.Trait<MirrorLayerOverlay>();
+				if (mirrorLayerOverlay.Tiles.Count == 0)
+					return;
+
+				var mod = modData.Manifest.Metadata;
+				var directory = Path.Combine(Platform.SupportDir, "Editor", modData.Manifest.Id, mod.Version, "MirrorTiles");
+				Directory.CreateDirectory(directory);
+
+				var mirrorTilesFile = mirrorLayerOverlay.ToFile();
+				var mirrorTilesContent = JsonConvert.SerializeObject(mirrorTilesFile);
+
+				var mirrorTileFilename = $"{Path.GetFileNameWithoutExtension(map.Package.Name)}.json";
+				using (var streamWriter = new StreamWriter(Path.Combine(directory, mirrorTileFilename), false))
+				{
+					streamWriter.Write(mirrorTilesContent);
+				}
+			}
+			catch (Exception e)
+			{
+				Log.Write("debug", "Failed to save map editor mirror tiles.");
+				Log.Write("debug", e);
+			}
 		}
 	}
 }

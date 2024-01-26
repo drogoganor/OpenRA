@@ -823,8 +823,28 @@ notification-added-resource =
 notification-added-tile = Added tile { $id }
 notification-filled-tile = Filled with tile { $id }
 
+## EditorMirrorLayerBrush
+notification-added-mirror-tiles =
+    { $amount ->
+       [one] Added one mirror tile of type { $type }
+      *[other] Added { $amount } mirror tiles of type { $type }
+    }
+notification-removed-mirror-tiles =
+    { $amount ->
+       [one] Removed one mirror tile
+      *[other] Removed { $amount } mirror tiles
+    }
+notification-cleared-selected-mirror-tiles = Cleared { $amount } mirror tiles of type { $type }
+notification-cleared-all-mirror-tiles = Cleared { $amount } mirror tiles
+
 ## EditorActionManager
 notification-opened = Opened
+
+## MapOverlaysLogic
+mirror-mode =
+    .none = None
+    .flip = Flip
+    .rotate = Rotate
 
 ## ActorEditLogic
 notification-edited-actor = Edited { $name } ({ $id })

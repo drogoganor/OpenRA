@@ -78,3 +78,8 @@ EditorToggleBuildableOverlay: F2
 	Description: Buildable Terrain Overlay
 	Types: Editor
 	Contexts: Editor
+
+EditorToggleMirrorOverlay: F3
+	Description: Mirror Layer Overlay
+	Types: Editor
+	Contexts: Editor

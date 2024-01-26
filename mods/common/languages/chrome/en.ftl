@@ -43,10 +43,8 @@ label-new-map-bg-width = Width:
 label-new-map-bg-height = Height:
 button-new-map-bg-create = Create
 
-label-save-map-panel-title =
-   .label = Save Map
-   .label = Title:
-
+label-save-map-panel-heading = Save Map
+label-save-map-panel-title = Title:
 label-save-map-panel-author = Author:
 label-save-map-panel-visibility = Visibility:
 dropdownbutton-save-map-panel-visibility-dropdown = Map Visibility
@@ -68,8 +66,14 @@ label-copy-filters = Copy Filters
 label-filter-terrain = Terrain
 label-filter-resources = Resources
 label-filter-actors = Actors
-label-show-tile-grid = Show Tile Grid
-label-show-buildable-area = Show Buildable Area
+label-tools-bg-categories = Tool:
+button-mirror-tiles-clear-current = Clear Current
+button-mirror-tiles-clear-all = Clear All
+label-mirror-layer-num-sides = Number of Sides
+label-mirror-alpha = Tile Alpha
+label-mirror-mode = Mirror Mode
+label-mirror-axis-angle = Axis Angle
+label-mirror-show-axis-guide = Show Axis Guide
 
 button-map-editor-tab-container-select-tooltip = Select
 button-map-editor-tab-container-tiles-tooltip = Tiles
@@ -98,8 +102,11 @@ button-editor-world-root-redo =
    .label = Redo
    .tooltip = Redo last step
 
+dropdownbutton-editor-world-root-overlay-button = Overlays
 button-select-categories-buttons-all = All
 button-select-categories-buttons-none = None
+
+label-tool-mirror-tiles = Mirror Tiles
 
 ## gamesave-browser.yaml
 label-gamesave-browser-panel-load-title = Load game
