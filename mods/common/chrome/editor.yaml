@@ -188,7 +188,7 @@ Container@EDITOR_ROOT:
 	Logic: LoadMapEditorLogic
 	Children:
 		LogicKeyListener@GLOBAL_KEYHANDLER:
-			Logic: MusicHotkeyLogic, ScreenshotHotkeyLogic, MuteHotkeyLogic, EditorQuickSaveHotkeyLogic
+			Logic: MusicHotkeyLogic, ScreenshotHotkeyLogic, MuteHotkeyLogic, EditorQuickSaveHotkeyLogic, EditorMoveActorHotkeyLogic
 				StopMusicKey: StopMusic
 				PauseMusicKey: PauseMusic
 				PrevMusicKey: PrevMusic

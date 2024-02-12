@@ -25,10 +25,6 @@ namespace OpenRA.Mods.Common.Traits
 	{
 		public readonly string DescriptiveName;
 		public readonly ActorInfo Info;
-		public readonly WPos CenterPosition;
-		public readonly IReadOnlyDictionary<CPos, SubCell> Footprint;
-		public readonly Rectangle Bounds;
-		public readonly SelectionBoxAnnotationRenderable SelectionBox;
 
 		public string Tooltip =>
 			(tooltip == null ? " < " + Info.Name + " >" : TranslationProvider.GetString(tooltip.Name)) + "\n" + Owner.Name + " (" + Owner.Faction + ")"
@@ -38,17 +34,22 @@ namespace OpenRA.Mods.Common.Traits
 
 		public string ID { get; set; }
 		public PlayerReference Owner { get; set; }
-		public SubCell SubCell { get; }
+		public WPos CenterPosition { get; set; }
+		public IReadOnlyDictionary<CPos, SubCell> Footprint { get; private set; }
+		public Rectangle Bounds { get; private set; }
 		public bool Selected { get; set; }
 		public Color RadarColor { get; private set; }
-		readonly RadarColorFromTerrainInfo terrainRadarColorInfo;
+		public CPos Location { get; private set; }
 
+		readonly RadarColorFromTerrainInfo terrainRadarColorInfo;
 		readonly WorldRenderer worldRenderer;
 		readonly TooltipInfoBase tooltip;
-		IActorPreview[] previews;
 		readonly ActorReference reference;
-		readonly Action<CPos> onCellEntryChanged;
 		readonly Dictionary<INotifyEditorPlacementInfo, object> editorData = new();
+
+		SelectionBoxAnnotationRenderable selectionBox;
+		IActorPreview[] previews;
+		Action<CPos> onCellEntryChanged;
 
 		public EditorActorPreview(WorldRenderer worldRenderer, string id, ActorReference reference, PlayerReference owner)
 		{
@@ -68,18 +69,7 @@ namespace OpenRA.Mods.Common.Traits
 				throw new InvalidDataException($"Actor {id} of unknown type {reference.Type.ToLowerInvariant()}");
 
 			CenterPosition = PreviewPosition(world, reference);
-
-			var location = reference.Get<LocationInit>().Value;
-			var ios = Info.TraitInfoOrDefault<IOccupySpaceInfo>();
-
-			var subCellInit = reference.GetOrDefault<SubCellInit>();
-			var subCell = subCellInit != null ? subCellInit.Value : SubCell.Any;
-
-			var occupiedCells = ios?.OccupiedCells(Info, location, subCell);
-			if (occupiedCells == null || occupiedCells.Count == 0)
-				Footprint = new Dictionary<CPos, SubCell>() { { location, SubCell.FullCell } };
-			else
-				Footprint = occupiedCells;
+			GenerateFootprint();
 
 			tooltip = Info.TraitInfos<EditorOnlyTooltipInfo>().FirstOrDefault(info => info.EnabledByDefault) as TooltipInfoBase
 				?? Info.TraitInfos<TooltipInfo>().FirstOrDefault(info => info.EnabledByDefault);
@@ -91,17 +81,34 @@ namespace OpenRA.Mods.Common.Traits
 			terrainRadarColorInfo = Info.TraitInfoOrDefault<RadarColorFromTerrainInfo>();
 			UpdateRadarColor();
 
-			// Bounds are fixed from the initial render.
-			// If this is a problem, then we may need to fetch the area from somewhere else
+			GenerateBounds();
+		}
+
+		void GenerateBounds()
+		{
 			var r = previews.SelectMany(p => p.ScreenBounds(worldRenderer, CenterPosition));
 
 			Bounds = r.Union();
 
-			SelectionBox = new SelectionBoxAnnotationRenderable(new WPos(CenterPosition.X, CenterPosition.Y, 8192),
+			selectionBox = new SelectionBoxAnnotationRenderable(new WPos(CenterPosition.X, CenterPosition.Y, 8192),
 				new Rectangle(Bounds.X, Bounds.Y, Bounds.Width, Bounds.Height), Color.White);
 
 			// TODO: updating all actors on the map is not very efficient.
 			onCellEntryChanged = _ => GeneratePreviews();
+		}
+
+		void GenerateFootprint()
+		{
+			Location = reference.Get<LocationInit>().Value;
+			var ios = Info.TraitInfoOrDefault<IOccupySpaceInfo>();
+			var subCellInit = reference.GetOrDefault<SubCellInit>();
+			var subCell = subCellInit != null ? subCellInit.Value : SubCell.Any;
+
+			var occupiedCells = ios?.OccupiedCells(Info, Location, subCell);
+			if (occupiedCells == null || occupiedCells.Count == 0)
+				Footprint = new Dictionary<CPos, SubCell>() { { Location, SubCell.FullCell } };
+			else
+				Footprint = occupiedCells;
 		}
 
 		public void Tick()
@@ -131,7 +138,7 @@ namespace OpenRA.Mods.Common.Traits
 		public IEnumerable<IRenderable> RenderAnnotations()
 		{
 			if (Selected)
-				yield return SelectionBox;
+				yield return selectionBox;
 		}
 
 		public void AddedToEditor()
@@ -212,6 +219,13 @@ namespace OpenRA.Mods.Common.Traits
 		{
 			reference.RemoveAll<T>();
 			GeneratePreviews();
+		}
+
+		public void RebuildVisuals()
+		{
+			CenterPosition = PreviewPosition(worldRenderer.World, reference);
+			GenerateFootprint();
+			GenerateBounds();
 		}
 
 		public MiniYaml Save()
