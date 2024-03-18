@@ -409,111 +409,110 @@ Container@EDITOR_WORLD_ROOT:
 					Height: 25
 					Font: Bold
 				ScrollPanel@MIRROR_TOOL_PANEL:
-					X: 9
+					X: 10
 					Y: 35
-					Width: 290
+					Width: PARENT_RIGHT - 20
 					Height: WINDOW_BOTTOM - 490
+					ContentHeight: 1200
 					Visible: true
-					ScrollBar: Hidden
-					ScrollbarWidth: 0
 					Logic: MapMirrorTilesLogic
 					Children:
 						ScrollPanel@TILE_COLOR_PANEL:
 							X: 6
 							Y: 6
-							Width: PARENT_RIGHT - 19
-							Height: 31
+							Width: PARENT_RIGHT - 37
+							Height: 29
 							TopBottomSpacing: 1
 							ItemSpacing: 1
 							ScrollBar: Hidden
 							ScrollbarWidth: 0
-							ContentHeight: 31
+							ContentHeight: 29
 							Children:
 								ScrollItem@TILE_COLOR_TEMPLATE:
 									Visible: false
-									Height: 29
-									Width: 29
+									Height: 27
+									Width: 27
 									IgnoreChildMouseOver: true
 									Children:
 										ColorBlock@TILE_PREVIEW:
 											X: 2
 											Y: 2
-											Width: 26
-											Height: 26
+											Width: 23
+											Height: 23
 								ScrollItem@TILE_ICON_TEMPLATE:
 									Visible: false
-									Height: 29
-									Width: 29
+									Height: 27
+									Width: 27
 									IgnoreChildMouseOver: true
 									Children:
 										Image@TILE_ERASE:
-											X: 6
-											Y: 6
-											Width: 26
-											Height: 26
+											X: 4
+											Y: 4
+											Width: 24
+											Height: 24
 											ImageCollection: editor
 											ImageName: erase
 						Button@CLEAR_CURRENT_BUTTON:
 							X: 6
-							Y: 42
+							Y: 40
 							Width: 100
 							Height: 25
 							Text: button-mirror-tiles-clear-current
 							Font: Bold
 						Button@CLEAR_ALL_BUTTON:
 							X: 111
-							Y: 42
+							Y: 40
 							Width: 75
 							Height: 25
 							Text: button-mirror-tiles-clear-all
 							Font: Bold
 						Label@ALPHA_LABEL:
 							X: 6
-							Y: 72
+							Y: 70
 							Width: 265
 							Height: 25
 							Align: Left
 							Text: label-mirror-alpha
 						Slider@ALPHA_SLIDER:
 							X: 130
-							Y: 72
-							Width: 128
+							Y: 70
+							Width: 103
 							Height: 25
 						Label@ALPHA_VALUE:
-							X: 260
-							Y: 72
+							X: 235
+							Y: 70
 							Width: 30
 							Height: 25
 							Align: Left
 							Text: 85
 						Label@MODE_LABEL:
 							X: 6
-							Y: 102
+							Y: 100
 							Width: 265
 							Height: 25
 							Align: Left
 							Text: label-mirror-mode
 						DropDownButton@MODE_DROPDOWN:
 							X: 129
-							Y: 102
-							Width: 157
+							Y: 100
+							Width: 132
 							Height: 25
 						Label@NUM_SIDES_LABEL:
 							X: 6
-							Y: 132
+							Y: 130
 							Width: 256
 							Height: 25
 							Align: Left
 							Text: label-mirror-layer-num-sides
 						Slider@ROTATE_NUM_SIDES_SLIDER:
 							X: 130
-							Y: 132
-							Width: 128
+							Y: 130
+							Width: 103
 							Height: 25
 							Visible: false
 						Label@ROTATE_NUM_SIDES_VALUE:
-							X: 260
-							Y: 132
+							X: 243
+							Y: 130
 							Width: 30
 							Height: 25
 							Align: Left
@@ -521,12 +520,12 @@ Container@EDITOR_WORLD_ROOT:
 							Visible: false
 						DropDownButton@FLIP_NUM_SIDES_DROPDOWN:
 							X: 129
-							Y: 132
-							Width: 157
+							Y: 130
+							Width: 132
 							Height: 25
 						Label@AXIS_ANGLE_LABEL:
 							X: 6
-							Y: 162
+							Y: 160
 							Width: 256
 							Height: 25
 							Align: Left
@@ -534,13 +533,13 @@ Container@EDITOR_WORLD_ROOT:
 							Visible: false
 						Slider@AXIS_ANGLE_SLIDER:
 							X: 130
-							Y: 162
-							Width: 128
+							Y: 160
+							Width: 103
 							Height: 25
 							Visible: false
 						Label@AXIS_ANGLE_VALUE:
-							X: 260
-							Y: 162
+							X: 235
+							Y: 160
 							Width: 30
 							Height: 25
 							Align: Left
@@ -548,11 +547,76 @@ Container@EDITOR_WORLD_ROOT:
 							Visible: false
 						Checkbox@AXIS_ANGLE_GUIDE:
 							X: 129
-							Y: 192
+							Y: 190
 							Width: 100
 							Height: 20
 							Text: label-mirror-show-axis-guide
+							Font: TinyBold
 							Visible: false
+						Label@FILE_LABEL2:
+							X: 6
+							Y: 220
+							Width: 30
+							Height: 25
+							Align: Left
+							Text: File
+						Container@MIRROR_TOOL_SAVE_CONTAINER:
+							X: 0
+							Y: 220
+							Width: 400
+							Height: 400
+							Children:
+								Label@FILE_LABEL:
+									X: 6
+									Y: 10
+									Width: 30
+									Height: 25
+									Align: Left
+									Text: File
+								TextField@FILE_INPUT:
+									X: 40
+									Y: 10
+									Width: PARENT_RIGHT - 30
+									Height: 25
+								Label@FILE_INPUT_ERROR_LABEL:
+									X: 40
+									Y: 40
+									Width: 208
+									Height: 15
+									Font: TinyBold
+									TextColor: FF0000
+									Text: Error
+								Container@MIRROR_TOOL_BUTTON_CONTAINER:
+									Y: 40
+									Width: PARENT_RIGHT
+									Children:
+										Label@LOAD_LABEL:
+											X: 6
+											Y: 40
+											Width: 30
+											Height: 25
+											Align: Left
+											Text: Load
+										DropDownButton@LOAD_DROPDOWN:
+											X: 40
+											Y: 40
+											Width: PARENT_RIGHT - 30
+											Height: 25
+											Font: Bold
+										Button@SAVE_BUTTON:
+											X: 6
+											Y: 70
+											Width: 75
+											Height: 25
+											Text: Save
+											Font: Bold
+										Button@LOAD_BUTTON:
+											X: 86
+											Y: 70
+											Width: 75
+											Height: 25
+											Text: Save
+											Font: Bold
 		Container@HISTORY_WIDGETS:
 			X: WINDOW_RIGHT - 320
 			Y: 354
