@@ -235,18 +235,18 @@ namespace OpenRA.Mods.Common.Traits
 			var boundsWidth = map.AllCells.BottomRight.X - map.AllCells.TopLeft.X;
 			var boundsHeight = map.AllCells.BottomRight.Y - map.AllCells.TopLeft.Y;
 
-			var xIsEven = boundsWidth % 2 == 0;
-			var yIsEven = boundsHeight % 2 == 0;
+			var xIsOdd = boundsWidth % 2 != 0;
+			var yIsOdd = boundsHeight % 2 != 0;
 
 			var xCenter = boundsWidth / 2;
 			var yCenter = boundsHeight / 2;
 
 			var centerWpos = map.CenterOfCell(new CPos(xCenter, yCenter));
-			if (xIsEven)
-				centerWpos -= new WVec(512, 0, 0);
+			if (xIsOdd)
+				centerWpos += new WVec(512, 0, 0);
 
-			if (yIsEven)
-				centerWpos -= new WVec(0, 512, 0);
+			if (yIsOdd)
+				centerWpos += new WVec(0, 512, 0);
 
 			return centerWpos;
 		}
@@ -356,9 +356,7 @@ namespace OpenRA.Mods.Common.Traits
 			// Maintain map of tile types for selective clearing
 			var prevTile = CellLayer[target];
 			if (prevTile.HasValue && Tiles.TryGetValue(prevTile.Value, out var set))
-			{
 				set.Remove(target);
-			}
 
 			if (tileType.HasValue)
 			{
@@ -370,9 +368,7 @@ namespace OpenRA.Mods.Common.Traits
 				CellLayer[target] = tileType;
 			}
 			else
-			{
 				CellLayer[target] = null;
-			}
 		}
 
 		void INotifyActorDisposing.Disposing(Actor self)
@@ -383,46 +379,92 @@ namespace OpenRA.Mods.Common.Traits
 			disposed = true;
 		}
 
+		readonly struct MapLine
+		{
+			public readonly float2 Start;
+			public readonly float2 End;
+
+			public MapLine(float2 start, float2 end)
+			{
+				Start = start;
+				End = end;
+			}
+		}
+
 		IEnumerable<IRenderable> IRenderAnnotations.RenderAnnotations(Actor self, WorldRenderer wr)
 		{
 			if (!Enabled)
 				yield break;
 
 			foreach (var cellPair in Tiles)
-			{
 				foreach (var cellPos in cellPair.Value)
-				{
 					yield return new MirrorTileRenderable(cellPos, alphaBlendColors[cellPair.Key]);
-				}
-			}
 
 			if (!ShowAxisGuide || MirrorMode != MirrorTileMode.Flip)
 				yield break;
 
-			const int Width = 1;
+			const int LineWidth = 1;
 
 			var color = Info.AxisAngleColor;
-			var map = wr.World.Map;
-			var lineLength = (int)Math.Sqrt(Math.Pow(map.MapSize.X, 2) + Math.Pow(map.MapSize.Y, 2)) / 2 * 1024;
-			var points = new[]
+			var targetAngle = AxisAngle * DegreesToRadians;
+
+			var mapCenterFloat = new float2(mapCenter.X, mapCenter.Y);
+			var mapBoundsWorldSize = mapCenterFloat * 2;
+
+			// Create our axis lines
+			var horizontalVec = new float2(1, 0);
+			var verticalVec = new float2(0, 1);
+			var edges = new[]
 			{
-				new WVec(0, lineLength, 0),
-				new WVec(0, -lineLength, 0),
-				new WVec(lineLength, 0, 0),
-				new WVec(-lineLength, 0, 0),
+				new MapLine(mapCenterFloat, mapCenterFloat + horizontalVec),
+				new MapLine(mapCenterFloat, mapCenterFloat + verticalVec),
 			};
 
+			var sourceAxes = new[] { verticalVec, -verticalVec, horizontalVec, -horizontalVec };
 			for (var i = 0; i < NumSides; i++)
 			{
-				var point = points[i];
-				var targetAngle = AxisAngle * DegreesToRadians;
-				var rotatedVec = new WVec((int)(point.X * Math.Cos(targetAngle) - point.Y * Math.Sin(targetAngle)),
-					(int)(point.X * Math.Sin(targetAngle) + point.Y * Math.Cos(targetAngle)),
-					0);
-				var rotatedPos = mapCenter + rotatedVec;
+				var isOpposite = i % 2 != 0;
+				var sourceAxis = sourceAxes[i];
+				var rotatedAxis = new float2(
+					(float)(sourceAxis.X * Math.Cos(targetAngle) - sourceAxis.Y * Math.Sin(targetAngle)),
+					(float)(sourceAxis.X * Math.Sin(targetAngle) + sourceAxis.Y * Math.Cos(targetAngle)));
 
-				yield return new LineAnnotationRenderable(mapCenter, rotatedPos, Width, color, color);
+				var axisLine = new MapLine(float2.Zero, rotatedAxis);
+				var collisionPoints = FindEdgeCollisionPoints(edges, axisLine);
+
+				var closestCollisionPoint = collisionPoints.OrderBy(x => x.LengthSquared).First();
+				if (isOpposite)
+					closestCollisionPoint *= -1;
+
+				var resultPos = new WVec((int)closestCollisionPoint.X, (int)closestCollisionPoint.Y, 0);
+				yield return new LineAnnotationRenderable(mapCenter, mapCenter + resultPos, LineWidth, color, color);
 			}
+		}
+
+		static float2[] FindEdgeCollisionPoints(MapLine[] mapEdges, MapLine axis)
+		{
+			var collisionResults = new List<float2>();
+			foreach (var mapEdge in mapEdges)
+				if (FindIntersection(axis.Start, axis.End, mapEdge.Start, mapEdge.End, out var collisionVec))
+					collisionResults.Add(collisionVec);
+
+			return collisionResults.ToArray();
+		}
+
+		static bool FindIntersection(float2 a1, float2 a2, float2 b1, float2 b2, out float2 result)
+		{
+			result = float2.Zero;
+			var d = (a1.X - a2.X) * (b1.Y - b2.Y) - (a1.Y - a2.Y) * (b1.X - b2.X);
+
+			// check if lines are parallel
+			if (d == 0)
+				return false;
+
+			var px = (a1.X * a2.Y - a1.Y * a2.X) * (b1.X - b2.X) - (a1.X - a2.X) * (b1.X * b2.Y - b1.Y * b2.X);
+			var py = (a1.X * a2.Y - a1.Y * a2.X) * (b1.Y - b2.Y) - (a1.Y - a2.Y) * (b1.X * b2.Y - b1.Y * b2.X);
+
+			result = new float2(px, py) / d;
+			return true;
 		}
 
 		bool IRenderAnnotations.SpatiallyPartitionable => false;
