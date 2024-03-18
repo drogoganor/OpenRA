@@ -12,6 +12,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using OpenRA.Graphics;
 using OpenRA.Mods.Common.Traits;
@@ -48,8 +49,19 @@ namespace OpenRA.Mods.Common.Widgets.Logic
 		readonly ButtonWidget clearSelectedButtonWidget;
 		readonly ButtonWidget clearAllButtonWidget;
 		readonly EditorViewportControllerWidget editor;
+		readonly Widget toolPanel;
+		readonly ContainerWidget saveContainer;
+		readonly ContainerWidget buttonContainer;
+		readonly TextFieldWidget filenameWidget;
+		readonly DropDownButtonWidget savedFilesDropdown;
+		readonly ButtonWidget saveButton;
+		readonly ButtonWidget loadButton;
+		readonly LabelWidget filenameErrorLabel;
 
 		int? mirrorTile;
+		string loadFilename;
+		string saveFilename;
+		string[] existingFilenames;
 
 		[ObjectCreator.UseCtor]
 		public MapMirrorTilesLogic(Widget widget, World world, ModData modData, WorldRenderer worldRenderer, Dictionary<string, MiniYaml> logicArgs)
@@ -60,7 +72,36 @@ namespace OpenRA.Mods.Common.Widgets.Logic
 			editor = widget.Parent.Parent.Parent.Parent.Get<EditorViewportControllerWidget>("MAP_EDITOR");
 			editor.BrushChanged += HandleBrushChanged;
 
-			mirrorTileColorPanel = widget.Get<ScrollPanelWidget>("TILE_COLOR_PANEL");
+			toolPanel = widget.Get("MIRROR_TOOL_CONTENTS");
+			(widget as ScrollPanelWidget).AddChild(toolPanel);
+
+			saveFilename = Path.GetFileNameWithoutExtension(world.Map.Package.Name);
+			loadFilename = saveFilename;
+			existingFilenames = GetMirrorTileFilenames();
+
+			saveContainer = toolPanel.Get<ContainerWidget>("MIRROR_TOOL_SAVE_CONTAINER");
+			buttonContainer = saveContainer.Get<ContainerWidget>("MIRROR_TOOL_BUTTON_CONTAINER");
+			filenameWidget = saveContainer.Get<TextFieldWidget>("FILE_INPUT");
+			filenameWidget.Text = saveFilename;
+			filenameWidget.OnTextEdited = () => saveFilename = filenameWidget.Text;
+
+			filenameErrorLabel = saveContainer.Get<LabelWidget>("FILE_INPUT_ERROR_LABEL");
+			filenameErrorLabel.IsVisible = () => string.IsNullOrWhiteSpace(saveFilename);
+			filenameErrorLabel.Text = "Please enter a filename.";
+
+			savedFilesDropdown = buttonContainer.Get<DropDownButtonWidget>("LOAD_DROPDOWN");
+			savedFilesDropdown.OnMouseDown = _ => ShowExistingFilesDropDown(savedFilesDropdown);
+			savedFilesDropdown.GetText = () => loadFilename;
+
+			loadButton = buttonContainer.Get<ButtonWidget>("LOAD_BUTTON");
+			loadButton.IsDisabled = () => existingFilenames.Length == 0;
+			loadButton.OnClick = () => LoadFile();
+
+			saveButton = buttonContainer.Get<ButtonWidget>("SAVE_BUTTON");
+			saveButton.IsDisabled = () => string.IsNullOrWhiteSpace(saveFilename);
+			saveButton.OnClick = () => SaveFile();
+
+			mirrorTileColorPanel = toolPanel.Get<ScrollPanelWidget>("TILE_COLOR_PANEL");
 			{
 				mirrorTileColorPanel.Layout = new GridLayout(mirrorTileColorPanel);
 				var colorSwatchTemplate = mirrorTileColorPanel.Get<ScrollItemWidget>("TILE_COLOR_TEMPLATE");
@@ -109,24 +150,24 @@ namespace OpenRA.Mods.Common.Widgets.Logic
 				}
 			}
 
-			clearSelectedButtonWidget = widget.Get<ButtonWidget>("CLEAR_CURRENT_BUTTON");
+			clearSelectedButtonWidget = toolPanel.Get<ButtonWidget>("CLEAR_CURRENT_BUTTON");
 			clearSelectedButtonWidget.IsDisabled = () => mirrorTile == null;
 			clearSelectedButtonWidget.OnClick = ClearSelected;
 
-			clearAllButtonWidget = widget.Get<ButtonWidget>("CLEAR_ALL_BUTTON");
+			clearAllButtonWidget = toolPanel.Get<ButtonWidget>("CLEAR_ALL_BUTTON");
 			clearAllButtonWidget.OnClick = ClearAll;
 
-			alphaSlider = widget.Get<SliderWidget>("ALPHA_SLIDER");
+			alphaSlider = toolPanel.Get<SliderWidget>("ALPHA_SLIDER");
 			alphaSlider.MinimumValue = 1;
 			alphaSlider.MaximumValue = 255;
 			alphaSlider.Ticks = 12;
 			alphaSlider.OnChange += (val) => mirrorLayerTrait.TileAlpha = (int)val;
 			alphaSlider.GetValue = () => mirrorLayerTrait.TileAlpha;
 
-			alphaValueLabel = widget.Get<LabelWidget>("ALPHA_VALUE");
+			alphaValueLabel = toolPanel.Get<LabelWidget>("ALPHA_VALUE");
 			alphaValueLabel.GetText = () => mirrorLayerTrait.TileAlpha.ToString(NumberFormatInfo.InvariantInfo);
 
-			modeDropdown = widget.Get<DropDownButtonWidget>("MODE_DROPDOWN");
+			modeDropdown = toolPanel.Get<DropDownButtonWidget>("MODE_DROPDOWN");
 			modeDropdown.OnMouseDown = _ => ShowMirrorModeDropDown(modeDropdown);
 			modeDropdown.GetText = () =>
 			{
@@ -146,10 +187,10 @@ namespace OpenRA.Mods.Common.Widgets.Logic
 			bool IsFlipMode() => mirrorLayerTrait.MirrorMode == MirrorTileMode.Flip;
 			bool IsRotateMode() => mirrorLayerTrait.MirrorMode == MirrorTileMode.Rotate;
 
-			numSidesLabel = widget.Get<LabelWidget>("NUM_SIDES_LABEL");
+			numSidesLabel = toolPanel.Get<LabelWidget>("NUM_SIDES_LABEL");
 			numSidesLabel.IsVisible = () => IsFlipMode() || IsRotateMode();
 
-			rotateNumSidesSlider = widget.Get<SliderWidget>("ROTATE_NUM_SIDES_SLIDER");
+			rotateNumSidesSlider = toolPanel.Get<SliderWidget>("ROTATE_NUM_SIDES_SLIDER");
 			rotateNumSidesSlider.MinimumValue = 2;
 			rotateNumSidesSlider.MaximumValue = 8;
 			rotateNumSidesSlider.Ticks = 7;
@@ -157,19 +198,19 @@ namespace OpenRA.Mods.Common.Widgets.Logic
 			rotateNumSidesSlider.OnChange += (val) => mirrorLayerTrait.NumSides = (int)val;
 			rotateNumSidesSlider.GetValue = () => mirrorLayerTrait.NumSides;
 
-			rotateNumSidesValueLabel = widget.Get<LabelWidget>("ROTATE_NUM_SIDES_VALUE");
+			rotateNumSidesValueLabel = toolPanel.Get<LabelWidget>("ROTATE_NUM_SIDES_VALUE");
 			rotateNumSidesValueLabel.IsVisible = IsRotateMode;
 			rotateNumSidesValueLabel.GetText = () => mirrorLayerTrait.NumSides.ToString(NumberFormatInfo.InvariantInfo);
 
-			flipNumSidesDropdown = widget.Get<DropDownButtonWidget>("FLIP_NUM_SIDES_DROPDOWN");
+			flipNumSidesDropdown = toolPanel.Get<DropDownButtonWidget>("FLIP_NUM_SIDES_DROPDOWN");
 			flipNumSidesDropdown.OnMouseDown = _ => ShowFlipNumSidesDropDown(flipNumSidesDropdown);
 			flipNumSidesDropdown.IsVisible = IsFlipMode;
 			flipNumSidesDropdown.GetText = () => mirrorLayerTrait.NumSides.ToString(NumberFormatInfo.InvariantInfo);
 
-			axisAngleLabel = widget.Get<LabelWidget>("AXIS_ANGLE_LABEL");
+			axisAngleLabel = toolPanel.Get<LabelWidget>("AXIS_ANGLE_LABEL");
 			axisAngleLabel.IsVisible = IsFlipMode;
 
-			axisAngleSlider = widget.Get<SliderWidget>("AXIS_ANGLE_SLIDER");
+			axisAngleSlider = toolPanel.Get<SliderWidget>("AXIS_ANGLE_SLIDER");
 			axisAngleSlider.MinimumValue = 0;
 			axisAngleSlider.MaximumValue = 11;
 			axisAngleSlider.Ticks = 12;
@@ -177,11 +218,11 @@ namespace OpenRA.Mods.Common.Widgets.Logic
 			axisAngleSlider.OnChange += (val) => mirrorLayerTrait.AxisAngle = (int)val * 15;
 			axisAngleSlider.GetValue = () => mirrorLayerTrait.AxisAngle / 15;
 
-			axisAngleValueLabel = widget.Get<LabelWidget>("AXIS_ANGLE_VALUE");
+			axisAngleValueLabel = toolPanel.Get<LabelWidget>("AXIS_ANGLE_VALUE");
 			axisAngleValueLabel.IsVisible = IsFlipMode;
 			axisAngleValueLabel.GetText = () => mirrorLayerTrait.AxisAngle.ToString(NumberFormatInfo.InvariantInfo);
 
-			axisAngleGuide = widget.Get<CheckboxWidget>("AXIS_ANGLE_GUIDE");
+			axisAngleGuide = toolPanel.Get<CheckboxWidget>("AXIS_ANGLE_GUIDE");
 			axisAngleGuide.IsVisible = IsFlipMode;
 			axisAngleGuide.IsChecked = () => mirrorLayerTrait.ShowAxisGuide;
 			axisAngleGuide.OnClick = () => mirrorLayerTrait.ShowAxisGuide = !mirrorLayerTrait.ShowAxisGuide;
@@ -260,6 +301,57 @@ namespace OpenRA.Mods.Common.Widgets.Logic
 
 			var options = new[] { 2, 4 };
 			dropdown.ShowDropDown("LABEL_DROPDOWN_TEMPLATE", 150, options, SetupItem);
+		}
+
+		void ShowExistingFilesDropDown(DropDownButtonWidget dropdown)
+		{
+			ScrollItemWidget SetupItem(string value, ScrollItemWidget itemTemplate)
+			{
+				var item = ScrollItemWidget.Setup(itemTemplate,
+					() => loadFilename == value,
+					() => loadFilename = value);
+
+				item.Get<LabelWidget>("LABEL").GetText = () => value;
+				return item;
+			}
+
+			dropdown.ShowDropDown("LABEL_DROPDOWN_TEMPLATE", 150, existingFilenames, SetupItem);
+		}
+
+		void LoadFile()
+		{
+			// TODO
+			saveFilename = loadFilename;
+			filenameWidget.Text = saveFilename;
+		}
+
+		void SaveFile()
+		{
+			// TODO: Actually save
+			existingFilenames = GetMirrorTileFilenames();
+			loadFilename = saveFilename;
+		}
+
+		static string[] GetMirrorTileFilenames()
+		{
+			try
+			{
+				var modData = Game.ModData;
+				var mod = modData.Manifest.Metadata;
+				var directory = Path.Combine(Platform.SupportDir, "Editor", modData.Manifest.Id, mod.Version, "MirrorTiles");
+				if (!Directory.Exists(directory))
+					return Array.Empty<string>();
+
+				var files = Directory.EnumerateFiles(directory, "*.json", SearchOption.TopDirectoryOnly);
+				return files.Select(x => Path.GetFileNameWithoutExtension(x)).ToArray();
+			}
+			catch (Exception e)
+			{
+				Log.Write("debug", "Failed to read map editor mirror tile files.");
+				Log.Write("debug", e);
+			}
+
+			return Array.Empty<string>();
 		}
 	}
 }
